@@ -1,0 +1,13 @@
+# Dependency directories
+node_modules
+.svelte-kit
+build
+
+# Optional eslint cache
+.eslintcache
+
+# dotenv environment variables file
+.env
+.env.test
+
+.env.local
