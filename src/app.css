@@ -98,3 +98,8 @@
         transform: scale(1);
     }
 }
+
+button.btn,
+a.btn {
+    @apply flex items-center justify-center gap-2 bg-primary hover:bg-primary/75 rounded-md py-2 px-4 transition-colors;
+}

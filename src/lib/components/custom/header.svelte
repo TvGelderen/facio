@@ -29,12 +29,7 @@
 		{#if user}
 			<a href="/dashboard">Profile</a>
 		{:else}
-			<a
-				href="/login"
-				class="rounded-md bg-primary px-4 py-2 transition-colors hover:bg-primary/75"
-			>
-				Login
-			</a>
+			<a href="/login" class="btn">Login</a>
 		{/if}
 		<ThemeSwitch />
 	</div>

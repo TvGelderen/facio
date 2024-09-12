@@ -41,10 +41,12 @@
     "packageManager": "pnpm@9.6.0+sha512.38dc6fba8dba35b39340b9700112c2fe1e12f10b17134715a4aa98ccf7bb035e76fd981cf0bb384dfa98f8d6af5481c2bef2f4266a24bfa20c34eb7147ce0b5e",
     "dependencies": {
         "@lucia-auth/adapter-drizzle": "^1.1.0",
+        "arctic": "^1.9.2",
         "bits-ui": "^0.21.13",
         "clsx": "^2.1.1",
         "dotenv": "^16.4.5",
         "drizzle-orm": "^0.33.0",
+        "iconify-icon": "^2.1.0",
         "lucia": "^3.2.0",
         "lucide-svelte": "^0.441.0",
         "mode-watcher": "^0.4.1",
