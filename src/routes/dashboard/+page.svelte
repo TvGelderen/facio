@@ -2,37 +2,36 @@
 	import { page } from "$app/stores";
 	import type { PageData } from "./$types";
 	import Plus from "lucide-svelte/icons/plus";
+	import Trash from "lucide-svelte/icons/trash";
 	import * as Card from "$lib/components/ui/card/index.js";
 	import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
 	import * as Dialog from "$lib/components/ui/dialog/index.js";
+	import { Field } from "$lib/components/ui/form";
 	import { Input } from "$lib/components/ui/input/index.js";
-	import { Textarea } from "$lib/components/ui/textarea/index.js";
 	import { Label } from "$lib/components/ui/label/index.js";
+	import { Textarea } from "$lib/components/ui/textarea/index.js";
 	import { UploadDropzone } from "@uploadthing/svelte";
 	import { createUploader } from "$lib/utils/uploadthing";
+	import { formSchema } from "./schema";
+	import { superForm } from "sveltekit-superforms";
+	import { zodClient } from "sveltekit-superforms/adapters";
 
-	const { websites }: PageData = $page.data as PageData;
+	const { websites, superValidatedForm }: PageData = $page.data as PageData;
 
-	let logo = $state(
-		"https://utfs.io/f/160b1221-c9a4-4ce0-906e-218d7fddc27d-1wvcb.png",
-	);
+	let logo = $state("");
+
+	const form = superForm(superValidatedForm, {
+		validators: zodClient(formSchema),
+	});
+
+	const { form: formData, errors, enhance } = form;
 
 	const uploader = createUploader("logoUploader", {
 		onClientUploadComplete: async (response) => {
 			if (!response[0]) return;
 
 			if (logo) {
-				try {
-					const file = logo.split("/").at(-1);
-
-					console.log(file);
-
-					await fetch(`/api/uploadthing?file=${file}`, {
-						method: "DELETE",
-					});
-				} catch (err) {
-					console.error(err);
-				}
+				await deleteLogo();
 			}
 
 			logo = response[0].url;
@@ -41,46 +40,65 @@
 			console.error(`Error uploading logo: ${err}`);
 		},
 	});
+
+	async function deleteLogo() {
+		try {
+			const file = logo.split("/").at(-1);
+			await fetch(`/api/uploadthing?file=${file}`, {
+				method: "DELETE",
+			});
+			logo = "";
+		} catch (err) {
+			console.error(err);
+		}
+	}
 </script>
 
-<Dialog.Root open>
+<Dialog.Root>
 	<section class="flex h-full w-full flex-col items-center justify-center">
-		<div class="flex w-[95%] max-w-screen-xl justify-end">
+		<div class="flex w-[95%] max-w-screen-xl flex-col items-end gap-4">
 			<Dialog.Trigger class={buttonVariants({ variant: "outline" })}>
 				<Plus class="mr-2" />Create website
 			</Dialog.Trigger>
-		</div>
-		{#if websites.length === 0}
-			<Dialog.Trigger
-				class={`${buttonVariants({ variant: "default" })} mt-6`}
-			>
-				<Plus class="mr-2" />Create your first website
-			</Dialog.Trigger>
-		{:else}
-			{#each websites as website}
-				<Card.Root>
-					<Card.Header>
-						<Card.Title>{website.name}</Card.Title>
-					</Card.Header>
-					<Card.Content>
-						<div>
-							{#if website.logo}
-								<enhanced:img
-									src={website.logo}
-									alt="Website logo"
-								/>
-							{:else}
-								<div
-									class="flex items-center justify-center bg-gradient-to-br from-muted-foreground to-primary"
-								>
-									No logo found
+			{#if websites.length === 0}
+				<Dialog.Trigger
+					class={`${buttonVariants({ variant: "default" })} mt-6`}
+				>
+					<Plus class="mr-2" />Create your first website
+				</Dialog.Trigger>
+			{:else}
+				<div
+					class="grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:gap-8"
+				>
+					{#each websites as website}
+						<Card.Root>
+							<Card.Header>
+								<Card.Title>{website.name}</Card.Title>
+							</Card.Header>
+							<Card.Content>
+								<div class="h-[300px]">
+									{#if website.logo}
+										<img
+											src={website.logo}
+											alt="Website logo"
+											class="h-full w-full rounded-xl border-2 border-muted object-cover"
+										/>
+									{:else}
+										<div
+											class="flex h-full w-full items-center justify-center rounded-xl border-2 border-muted bg-gradient-to-br from-primary/50 to-muted-foreground/50"
+										>
+											<span class="text-lg lg:text-xl">
+												No logo found
+											</span>
+										</div>
+									{/if}
 								</div>
-							{/if}
-						</div>
-					</Card.Content>
-				</Card.Root>
-			{/each}
-		{/if}
+							</Card.Content>
+						</Card.Root>
+					{/each}
+				</div>
+			{/if}
+		</div>
 	</section>
 
 	<Dialog.Content class="max-w-[95%] sm:max-w-[500px]">
@@ -91,39 +109,61 @@
 			</Dialog.Description>
 		</Dialog.Header>
 		<div class="flex flex-col justify-center">
-			<UploadDropzone {uploader} />
-			{#if logo}
-				<img
-					src={logo}
-					alt="logo"
-					class="max-h-[200px] object-contain"
-				/>
+			<span>Website Logo</span>
+			{#if !logo && !$formData?.logo}
+				<UploadDropzone {uploader} class="bg-secondary/50" />
 			{:else}
-				<div class=""></div>
+				<div class="group relative mx-auto h-[200px] w-fit">
+					<img
+						src={logo ? logo : ($formData.logo as string)}
+						alt="logo"
+						class="h-full w-full rounded-xl border-2 border-muted"
+					/>
+					<Button
+						on:click={deleteLogo}
+						variant="destructive"
+						class="absolute right-0 top-0 hidden !px-2 py-1 group-hover:block"
+					>
+						<Trash />
+					</Button>
+				</div>
 			{/if}
 		</div>
-		<form method="post" class="flex flex-col gap-4">
-			<Input id="logo" name="logo" value={logo} type="hidden" />
-			<div class="grid grid-cols-4 items-center gap-4">
-				<Label for="name" class="text-right">Website name</Label>
+		<form method="POST" class="flex flex-col gap-2" use:enhance>
+			<div>
 				<Input
-					id="name"
-					placeholder="Website name"
-					class="col-span-3"
+					id="logo"
+					name="logo"
+					type="hidden"
+					bind:value={$formData.logo}
 				/>
 			</div>
-			<div class="grid grid-cols-4 items-center gap-4">
-				<Label for="description" class="text-right">Description</Label>
+			<div class="flex flex-col gap-2">
+				<Label for="description">Name</Label>
+				<Input
+					id="name"
+					name="name"
+					type="text"
+					class={$errors.name && "ring-2 ring-destructive"}
+					bind:value={$formData.name}
+				/>
+				{#if $errors.name}
+					<span class="text-destructive">{$errors.name}</span>
+				{/if}
+			</div>
+			<div class="flex flex-col gap-2">
+				<Label>Description</Label>
 				<Textarea
 					id="description"
 					name="description"
-					placeholder="What is your website about?"
-					class="col-span-3"
+					class={$errors.description && "ring-2 ring-destructive"}
+					bind:value={$formData.description}
 				/>
+				{#if $errors.description}
+					<span class="text-destructive">{$errors.description}</span>
+				{/if}
 			</div>
+			<Button type="submit" class="w-fit">Create</Button>
 		</form>
-		<Dialog.Footer>
-			<Button type="submit">Create</Button>
-		</Dialog.Footer>
 	</Dialog.Content>
 </Dialog.Root>

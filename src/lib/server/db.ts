@@ -45,7 +45,7 @@ export async function insertWebsite(userId: string, name: string, description: s
         name,
         description,
         logo,
-    });
+    }).returning({ id: schema.websites.id });
 }
 
 export async function updateWebsiteDescription(id: number, description: string) {
@@ -60,6 +60,12 @@ export async function updateWebsiteLogo(id: number, logo: string) {
         logo,
         updatedAt: sql`NOW()`
     }).where(eq(schema.websites.id, id));
+}
+
+export async function getWebsite(id: number) {
+    return db.query.websites.findFirst({
+        where: eq(schema.websites.id, id)
+    });
 }
 
 export async function getUserWebsites(id: string) {

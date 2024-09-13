@@ -31,15 +31,15 @@ const userUpdateForm = z.object({
 });
 
 export const actions = {
-    default: async ({ locals, request }: RequestEvent) => {
-        if (!locals.user) throw redirect(302, "/");
+    default: async ({ locals: { user }, request }: RequestEvent) => {
+        if (!user) throw redirect(302, "/login");
 
         const formData = Object.fromEntries(await request.formData());
 
         try {
             const result = userUpdateForm.parse(formData);
 
-            await updateUser(locals.user.id, result.username, result.email);
+            await updateUser(user.id, result.username, result.email);
         } catch (err) {
             console.error(err);
 

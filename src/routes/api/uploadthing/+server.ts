@@ -15,7 +15,6 @@ const { GET, POST } = createRouteHandler({
 export { GET, POST };
 
 export async function DELETE(event: RequestEvent): Promise<Response> {
-    console.log("DELETE")
     if (!event.locals.user) {
         return new Response(null, { status: 401 });
     }
