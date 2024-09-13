@@ -2,8 +2,12 @@
 	import { pricingPlans } from "$lib/pricing";
 	import * as Card from "$lib/components/ui/card/index.js";
 	import Check from "lucide-svelte/icons/check";
+	import Button from "$lib/components/ui/button/button.svelte";
 </script>
 
+<div
+	class="absolute inset-0 -z-10 bg-[linear-gradient(to_right,#4f4f4f3e_1px,transparent_1px),linear-gradient(to_bottom,#4f4f4f3e_1px,transparent_1px)] bg-[size:4rem_4rem] [mask-image:radial-gradient(ellipse_60%_50%_at_50%_0%,#000_70%,transparent_100%)]"
+></div>
 <section>
 	<div
 		class="relative bg-gradient-to-r from-primary to-secondary-foreground bg-clip-text text-transparent"
@@ -22,7 +26,7 @@
 			></div>
 			<enhanced:img
 				src="/static/img/hero_image_tmp.png"
-				alt="Dashboard preview image"
+				alt="Dashboard preview"
 				class="mx-auto mt-[-12px] w-[90%] max-w-[1200px] rounded-t-2xl border-2 border-muted md:mt-0"
 			/>
 		</div>
@@ -71,12 +75,13 @@
 							</div>
 						{/each}
 					</div>
-					<a
+					<Button
 						href={`/purchase?plan=${plan.id}`}
-						class={`w-full rounded-md bg-primary py-2 text-center hover:bg-primary/75 ${plan.id !== "pro" && "!bg-muted-foreground/25 dark:!bg-muted-foreground/50 dark:hover:!bg-muted-foreground/75"} transition-colors`}
+						variant={plan.id === "pro" ? "default" : "secondary"}
+						class="w-full"
 					>
 						Get Started
-					</a>
+					</Button>
 				</Card.Footer>
 			</Card.Root>
 		{/each}

@@ -6,5 +6,8 @@ export default defineConfig({
     plugins: [
         enhancedImages(),
         sveltekit()
-    ]
+    ],
+    build: {
+        minify: true
+    }
 });

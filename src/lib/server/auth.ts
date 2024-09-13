@@ -11,13 +11,27 @@ export const lucia = new Lucia(adapter, {
         attributes: {
             secure: !dev
         }
+    },
+    getUserAttributes: (attributes) => {
+        return {
+            username: attributes.username,
+            email: attributes.email,
+            avatar: attributes.avatar,
+        };
     }
 });
 
 declare module "lucia" {
     interface Register {
         Lucia: typeof lucia;
+        DatabaseUserAttributes: DatabaseUserAttributes;
     }
+}
+
+interface DatabaseUserAttributes {
+    username: string;
+    email: string | null;
+    avatar: string | null;
 }
 
 // OAuth
