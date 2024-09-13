@@ -1,16 +1,13 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import Button from "$lib/components/ui/button/button.svelte";
 	import * as Card from "$lib/components/ui/card/index.js";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { Label } from "$lib/components/ui/label/index.js";
+	import { Button } from "$lib/components/ui/button/index.js";
 	import type { ActionData, PageData } from "../profile/$types";
 
 	const { user }: PageData = $page.data as PageData;
 	const form: ActionData = $page.form;
-
-	let username = $state(form?.data?.name ?? user.username);
-	let email = $state(form?.data?.email ?? user.email);
 </script>
 
 <section class="mt-12 flex h-full w-full items-center justify-center">
@@ -31,7 +28,7 @@
 						name="username"
 						class={form?.errors?.username &&
 							"!ring-2 !ring-red-500/75 !ring-offset-2"}
-						bind:value={username}
+						value={form?.data?.username ?? user.username}
 					/>
 					{#if form?.errors?.username}
 						<span class="text-xs text-red-500/75">
@@ -50,7 +47,7 @@
 						name="email"
 						class={form?.errors?.email &&
 							"!ring-2 !ring-red-500/75 !ring-offset-2"}
-						bind:value={email}
+						value={form?.data?.email ?? user.email}
 					/>
 					{#if form?.errors?.email}
 						<span class="text-xs text-red-500/75">

@@ -2,7 +2,7 @@
 	import type { User } from "lucia";
 	import ThemeSwitch from "./theme-switch.svelte";
 	import UserDropdown from "./user-dropdown.svelte";
-	import Button from "../ui/button/button.svelte";
+	import { Button } from "$lib/components/ui/button/index.js";
 
 	const {
 		user,

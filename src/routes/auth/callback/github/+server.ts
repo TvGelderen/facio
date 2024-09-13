@@ -1,6 +1,6 @@
 import { github, lucia } from "$lib/server/auth";
 import { db, insertUser } from "$lib/server/db";
-import { userTable } from "$lib/server/schema";
+import { users } from "$lib/server/schema";
 import type { RequestEvent } from "@sveltejs/kit";
 import { OAuth2RequestError } from "arctic";
 import { and, eq } from "drizzle-orm";
@@ -24,8 +24,8 @@ export async function GET(event: RequestEvent): Promise<Response> {
         });
         const githubUser: GitHubUser = await githubUserResponse.json();
 
-        const user = await db.query.userTable.findFirst({
-            where: and(eq(userTable.provider, "github"), eq(userTable.provider_id, githubUser.id.toString()))
+        const user = await db.query.users.findFirst({
+            where: and(eq(users.provider, "github"), eq(users.provider_id, githubUser.id.toString()))
         })
 
         let userId = user?.id ?? generateIdFromEntropySize(10);

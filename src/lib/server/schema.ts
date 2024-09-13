@@ -1,6 +1,6 @@
 import { pgTable, serial, text, timestamp, unique } from "drizzle-orm/pg-core";
 
-export const userTable = pgTable("users", {
+export const users = pgTable("users", {
     id: text("id").primaryKey(),
     provider: text("provider").notNull(),
     provider_id: text("provider_id").notNull(),
@@ -19,10 +19,12 @@ export const userTable = pgTable("users", {
     unq: unique().on(t.provider, t.provider_id)
 }));
 
-export const websiteTable = pgTable("website", {
+export const websites = pgTable("website", {
     id: serial("id").primaryKey(),
-    userId: text("user_id").notNull().references(() => userTable.id),
+    userId: text("user_id").notNull().references(() => users.id),
     name: text("name").notNull(),
+    description: text("description"),
+    logo: text("logo"),
     createdAt: timestamp("created_at", {
         withTimezone: true,
         mode: "date"
@@ -31,11 +33,18 @@ export const websiteTable = pgTable("website", {
         withTimezone: true,
         mode: "date"
     }).defaultNow(),
+});
+
+export const logos = pgTable("logo", {
+    id: serial("id").primaryKey(),
+    userId: text("user_id").notNull().references(() => users.id),
+    file: text("file").notNull(),
+    url: text("url").notNull(),
 })
 
-export const sessionTable = pgTable("session", {
+export const sessions = pgTable("session", {
     id: text("id").primaryKey(),
-    userId: text("user_id").notNull().references(() => userTable.id),
+    userId: text("user_id").notNull().references(() => users.id),
     expiresAt: timestamp("expires_at", {
         withTimezone: true,
         mode: "date"

@@ -31,8 +31,10 @@
 				<span>Subscription</span>
 			</DropdownMenu.Item>
 			<DropdownMenu.Item>
-				<LayoutDashboard class="mr-2 h-4 w-4" />
-				<span>Dashboard</span>
+				<a href="/dashboard" class="flex items-center">
+					<LayoutDashboard class="mr-2 h-4 w-4" />
+					<span>Dashboard</span>
+				</a>
 			</DropdownMenu.Item>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item>
