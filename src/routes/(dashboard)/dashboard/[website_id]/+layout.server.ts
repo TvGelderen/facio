@@ -13,6 +13,7 @@ export const load: LayoutServerLoad = async ({ locals: { user }, params: { websi
     }
 
     return {
+        user,
         website
     }
 }
