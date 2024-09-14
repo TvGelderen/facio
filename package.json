@@ -44,7 +44,7 @@
     "dependencies": {
         "@lucia-auth/adapter-drizzle": "^1.1.0",
         "@sveltejs/adapter-node": "^5.2.2",
-        "@uploadthing/svelte": "^6.7.0",
+        "@uploadthing/svelte": "^7.0.1",
         "arctic": "^1.9.2",
         "bits-ui": "^0.21.13",
         "clsx": "^2.1.1",
@@ -59,6 +59,6 @@
         "prettier-plugin-tailwind": "^2.2.12",
         "tailwind-merge": "^2.5.2",
         "tailwind-variants": "^0.2.1",
-        "uploadthing": "^6.13.3"
+        "uploadthing": "^7.0.1"
     }
 }

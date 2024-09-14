@@ -13,12 +13,12 @@
 
 <ModeWatcher />
 
-<Header {user} />
-
 <svelte:head>
 	<title>Pagegen</title>
 </svelte:head>
 
-<main>
+<Header {user} />
+
+<main class="min-h-[calc(100dvh_-_72px)]">
 	{@render children()}
 </main>

@@ -1,18 +1,17 @@
 import { env } from "$env/dynamic/private";
+import { deleteLogo, getLogo } from "$lib/server/db";
 import { fileRouter, utapi } from "$lib/server/uploadthing";
-
 import { createRouteHandler } from "uploadthing/server";
 import type { RequestEvent } from "./$types";
-import { deleteLogo, getLogo } from "$lib/server/db";
 
-const { GET, POST } = createRouteHandler({
+export const handlers = createRouteHandler({
     router: fileRouter,
     config: {
-        uploadthingSecret: env.UPLOADTHING_SECRET,
+        token: env.UPLOADTHING_SECRET,
     },
 });
 
-export { GET, POST };
+export { handlers as GET, handlers as POST };
 
 export async function DELETE(event: RequestEvent): Promise<Response> {
     if (!event.locals.user) {

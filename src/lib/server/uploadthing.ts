@@ -27,9 +27,6 @@ export const fileRouter = {
         })
         .onUploadComplete(async ({ metadata, file }) => {
             console.log("Upload complete for userId:", metadata.userId);
-
-            console.log(file)
-
             insertLogo(metadata.userId, file.key, file.url);
         })
 } satisfies FileRouter;
@@ -37,5 +34,5 @@ export const fileRouter = {
 export type PagegenFileRouter = typeof fileRouter;
 
 export const utapi = new UTApi({
-    apiKey: UPLOADTHING_SECRET
+    token: UPLOADTHING_SECRET
 });

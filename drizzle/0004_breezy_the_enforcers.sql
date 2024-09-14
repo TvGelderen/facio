@@ -1,0 +1,1 @@
+ALTER TABLE "website" ADD COLUMN "url_name" text NOT NULL;

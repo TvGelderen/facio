@@ -22,7 +22,6 @@ export const actions = {
         if (!event.locals.user) throw redirect(302, "/login");
 
         const form = await superValidate(event, zod(formSchema));
-
         if (!form.valid) {
             return fail(400, {
                 form
@@ -31,6 +30,6 @@ export const actions = {
 
         const response = await insertWebsite(event.locals.user.id, form.data.name, form.data.description, form.data.logo ?? null);
 
-        redirect(302, `/website/${response[0].id}`);
+        redirect(302, `/dashboard/${response.id}`);
     }
 }

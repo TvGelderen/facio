@@ -27,14 +27,14 @@
 				</a>
 			</DropdownMenu.Item>
 			<DropdownMenu.Item>
-				<CreditCard class="mr-2 h-4 w-4" />
-				<span>Subscription</span>
-			</DropdownMenu.Item>
-			<DropdownMenu.Item>
 				<a href="/dashboard" class="flex items-center">
 					<LayoutDashboard class="mr-2 h-4 w-4" />
 					<span>Dashboard</span>
 				</a>
+			</DropdownMenu.Item>
+			<DropdownMenu.Item disabled>
+				<CreditCard class="mr-2 h-4 w-4" />
+				<span>Subscription</span>
 			</DropdownMenu.Item>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item>

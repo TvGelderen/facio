@@ -10,29 +10,29 @@ export const users = pgTable("users", {
     createdAt: timestamp("created_at", {
         withTimezone: true,
         mode: "date"
-    }).defaultNow(),
+    }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", {
         withTimezone: true,
         mode: "date"
-    }).defaultNow(),
+    }).notNull().defaultNow(),
 }, (t) => ({
     unq: unique().on(t.provider, t.provider_id)
 }));
 
 export const websites = pgTable("website", {
-    id: serial("id").primaryKey(),
+    id: text("id").primaryKey(),
     userId: text("user_id").notNull().references(() => users.id),
     name: text("name").notNull(),
-    description: text("description"),
+    description: text("description").notNull(),
     logo: text("logo"),
     createdAt: timestamp("created_at", {
         withTimezone: true,
         mode: "date"
-    }).defaultNow(),
+    }).notNull().defaultNow(),
     updatedAt: timestamp("updated_at", {
         withTimezone: true,
         mode: "date"
-    }).defaultNow(),
+    }).notNull().defaultNow(),
 });
 
 export const logos = pgTable("logo", {

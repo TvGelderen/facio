@@ -3,10 +3,8 @@
 	import type { PageData } from "./$types";
 	import Plus from "lucide-svelte/icons/plus";
 	import Trash from "lucide-svelte/icons/trash";
-	import * as Card from "$lib/components/ui/card/index.js";
 	import { Button, buttonVariants } from "$lib/components/ui/button/index.js";
 	import * as Dialog from "$lib/components/ui/dialog/index.js";
-	import { Field } from "$lib/components/ui/form";
 	import { Input } from "$lib/components/ui/input/index.js";
 	import { Label } from "$lib/components/ui/label/index.js";
 	import { Textarea } from "$lib/components/ui/textarea/index.js";
@@ -15,6 +13,7 @@
 	import { formSchema } from "./schema";
 	import { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
+	import WebsiteCard from "./website-card.svelte";
 
 	const { websites, superValidatedForm }: PageData = $page.data as PageData;
 
@@ -56,8 +55,10 @@
 
 <Dialog.Root>
 	<section class="flex h-full w-full flex-col items-center justify-center">
-		<div class="flex w-[95%] max-w-screen-xl flex-col items-end gap-4">
-			<Dialog.Trigger class={buttonVariants({ variant: "outline" })}>
+		<div class="flex w-[95%] max-w-screen-xl flex-col items-center gap-4">
+			<Dialog.Trigger
+				class={`${buttonVariants({ variant: "outline" })} self-end`}
+			>
 				<Plus class="mr-2" />Create website
 			</Dialog.Trigger>
 			{#if websites.length === 0}
@@ -68,33 +69,10 @@
 				</Dialog.Trigger>
 			{:else}
 				<div
-					class="grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:gap-8"
+					class="flex w-full flex-wrap items-center justify-center gap-8"
 				>
 					{#each websites as website}
-						<Card.Root>
-							<Card.Header>
-								<Card.Title>{website.name}</Card.Title>
-							</Card.Header>
-							<Card.Content>
-								<div class="h-[300px]">
-									{#if website.logo}
-										<img
-											src={website.logo}
-											alt="Website logo"
-											class="h-full w-full rounded-xl border-2 border-muted object-cover"
-										/>
-									{:else}
-										<div
-											class="flex h-full w-full items-center justify-center rounded-xl border-2 border-muted bg-gradient-to-br from-primary/50 to-muted-foreground/50"
-										>
-											<span class="text-lg lg:text-xl">
-												No logo found
-											</span>
-										</div>
-									{/if}
-								</div>
-							</Card.Content>
-						</Card.Root>
+						<WebsiteCard {website} />
 					{/each}
 				</div>
 			{/if}

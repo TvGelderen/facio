@@ -29,6 +29,20 @@
       "when": 1726250462742,
       "tag": "0003_quick_famine",
       "breakpoints": true
+    },
+    {
+      "idx": 4,
+      "version": "7",
+      "when": 1726300888530,
+      "tag": "0004_breezy_the_enforcers",
+      "breakpoints": true
+    },
+    {
+      "idx": 5,
+      "version": "7",
+      "when": 1726301898575,
+      "tag": "0005_unique_prowler",
+      "breakpoints": true
     }
   ]
 }

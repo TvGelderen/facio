@@ -3,6 +3,8 @@ import { drizzle } from 'drizzle-orm/postgres-js';
 import postgres from 'postgres';
 import * as schema from './schema';
 import { eq, sql } from 'drizzle-orm';
+import { generateIdFromEntropySize } from 'lucia';
+import type { Website } from '$lib/types';
 
 export const client = postgres({
     host: DB_HOST,
@@ -39,33 +41,45 @@ export async function updateUser(id: string, username: string, email: string) {
     }).where(eq(schema.users.id, id));
 }
 
-export async function insertWebsite(userId: string, name: string, description: string | null, logo: string | null) {
-    return db.insert(schema.websites).values({
+export async function insertWebsite(userId: string, name: string, description: string, logo: string | null) {
+    return (await db.insert(schema.websites).values({
+        id: generateIdFromEntropySize(10),
         userId,
         name,
         description,
         logo,
-    }).returning({ id: schema.websites.id });
+    }).returning({ id: schema.websites.id }))[0];
 }
 
-export async function updateWebsiteDescription(id: number, description: string) {
+export async function updateWebsiteName(id: string, name: string) {
+    return db.update(schema.websites).set({
+        name,
+        updatedAt: sql`NOW()`
+    }).where(eq(schema.websites.id, id));
+}
+
+export async function updateWebsiteDescription(id: string, description: string) {
     return db.update(schema.websites).set({
         description,
         updatedAt: sql`NOW()`
     }).where(eq(schema.websites.id, id));
 }
 
-export async function updateWebsiteLogo(id: number, logo: string) {
+export async function updateWebsiteLogo(id: string, logo: string) {
     return db.update(schema.websites).set({
         logo,
         updatedAt: sql`NOW()`
     }).where(eq(schema.websites.id, id));
 }
 
-export async function getWebsite(id: number) {
-    return db.query.websites.findFirst({
+export async function getWebsite(id: string) {
+    return (await db.query.websites.findFirst({
         where: eq(schema.websites.id, id)
-    });
+    })) as Website;
+}
+
+export async function deleteWebsite(id: string) {
+    return db.delete(schema.websites).where(eq(schema.websites.id, id));
 }
 
 export async function getUserWebsites(id: string) {
