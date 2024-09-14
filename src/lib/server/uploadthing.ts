@@ -1,7 +1,7 @@
 import { createUploadthing, UTApi } from "uploadthing/server";
 import type { FileRouter } from "uploadthing/server";
 import { lucia } from "./auth";
-import { insertLogo } from "./db";
+import { insertImage } from "./db";
 import { UPLOADTHING_SECRET } from "$env/static/private";
 
 const f = createUploadthing();
@@ -16,7 +16,7 @@ async function auth(req: Request) {
 }
 
 export const fileRouter = {
-    logoUploader: f({ image: { maxFileSize: "2MB" } })
+    imageUploader: f({ image: { maxFileSize: "2MB" } })
         .middleware(async ({ req }) => {
             const userId = await auth(req);
             if (!userId) {
@@ -27,7 +27,7 @@ export const fileRouter = {
         })
         .onUploadComplete(async ({ metadata, file }) => {
             console.log("Upload complete for userId:", metadata.userId);
-            insertLogo(metadata.userId, file.key, file.url);
+            insertImage(metadata.userId, file.key, file.url);
         })
 } satisfies FileRouter;
 

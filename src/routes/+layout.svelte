@@ -5,6 +5,7 @@
 	import { page } from "$app/stores";
 	import Header from "$lib/components/custom/header.svelte";
 	import { ModeWatcher } from "mode-watcher";
+	import { Toaster } from "$lib/components/ui/sonner";
 
 	const { children } = $props();
 
@@ -12,6 +13,8 @@
 </script>
 
 <ModeWatcher />
+
+<Toaster />
 
 <svelte:head>
 	<title>Pagegen</title>

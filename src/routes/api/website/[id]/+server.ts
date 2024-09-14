@@ -1,8 +1,8 @@
 import { deleteWebsite, getWebsite } from "$lib/server/db";
-import { fail, redirect } from "@sveltejs/kit";
+import { fail } from "@sveltejs/kit";
 import type { RequestEvent } from "./$types";
 
-export async function POST({ locals: { user }, params: { id } }: RequestEvent): Promise<Response> {
+export async function DELETE({ locals: { user }, params: { id } }: RequestEvent): Promise<Response> {
     if (!user) {
         throw fail(401);
     }
@@ -23,5 +23,5 @@ export async function POST({ locals: { user }, params: { id } }: RequestEvent): 
         throw fail(500);
     }
 
-    redirect(302, "/dashboard");
+    return new Response(null, { status: 201 });
 }

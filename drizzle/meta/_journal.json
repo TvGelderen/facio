@@ -5,43 +5,8 @@
     {
       "idx": 0,
       "version": "7",
-      "when": 1726168960502,
-      "tag": "0000_light_tyger_tiger",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "7",
-      "when": 1726241436558,
-      "tag": "0001_deep_quicksilver",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "7",
-      "when": 1726244019702,
-      "tag": "0002_jittery_runaways",
-      "breakpoints": true
-    },
-    {
-      "idx": 3,
-      "version": "7",
-      "when": 1726250462742,
-      "tag": "0003_quick_famine",
-      "breakpoints": true
-    },
-    {
-      "idx": 4,
-      "version": "7",
-      "when": 1726300888530,
-      "tag": "0004_breezy_the_enforcers",
-      "breakpoints": true
-    },
-    {
-      "idx": 5,
-      "version": "7",
-      "when": 1726301898575,
-      "tag": "0005_unique_prowler",
+      "when": 1726324054887,
+      "tag": "0000_hot_maverick",
       "breakpoints": true
     }
   ]

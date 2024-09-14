@@ -17,7 +17,7 @@
 	</div>
 
 	<nav
-		class="absolute bottom-0 left-1/2 top-0 hidden -translate-x-1/2 md:flex"
+		class="absolute bottom-0 left-1/2 top-0 hidden -translate-x-1/2 md:!flex"
 	>
 		<ul class="flex items-center gap-8">
 			<li><a href="/">About</a></li>

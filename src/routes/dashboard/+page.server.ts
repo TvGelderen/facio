@@ -3,7 +3,7 @@ import { fail, redirect } from "@sveltejs/kit";
 import { superValidate } from "sveltekit-superforms";
 import { zod } from "sveltekit-superforms/adapters";
 import type { PageServerLoad, RequestEvent } from "./$types";
-import { formSchema } from "./schema";
+import { formSchema } from "./formSchema";
 
 export const load: PageServerLoad = async ({ locals: { user } }) => {
     if (!user) {
@@ -13,7 +13,7 @@ export const load: PageServerLoad = async ({ locals: { user } }) => {
     return {
         user,
         websites: await getUserWebsites(user.id),
-        superValidatedForm: await superValidate(zod(formSchema))
+        websiteForm: await superValidate(zod(formSchema))
     }
 }
 

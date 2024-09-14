@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { pricingPlans } from "$lib/pricing";
-	import Check from "lucide-svelte/icons/check";
+	import { Check } from "lucide-svelte";
 	import * as Card from "$lib/components/ui/card/index.js";
 	import { Button } from "$lib/components/ui/button/index.js";
 </script>

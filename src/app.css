@@ -36,6 +36,11 @@
     }
 
     .dark {
+        /* Name: custom color palette
+       Author: Ilias Ism
+       URL: https://gradient.page */
+
+        /* CSS: .bg-gradient { background: var(--gradient) } */
         --gradient: linear-gradient(to top left, #007adf, #00ecbc);
 
         --background: 220 65% 3.52%;
@@ -67,15 +72,15 @@
 
         --ring: 220 100% 44%;
     }
+}
 
-    * {
-        @apply border-border;
-    }
+* {
+    @apply border-border;
+}
 
-    body {
-        @apply bg-background text-foreground;
-        font-family: "Inter", sans-serif, system-ui, -apple-system;
-    }
+body {
+    @apply bg-background text-foreground;
+    font-family: "Inter", sans-serif, system-ui, -apple-system;
 }
 
 .dot-pattern {

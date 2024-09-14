@@ -88,20 +88,20 @@ export async function getUserWebsites(id: string) {
     });
 }
 
-export async function insertLogo(userId: string, file: string, url: string) {
-    return db.insert(schema.logos).values({
+export async function insertImage(userId: string, file: string, url: string) {
+    return db.insert(schema.images).values({
         userId,
         file,
         url,
     })
 }
 
-export async function getLogo(file: string) {
-    return db.query.logos.findFirst({
-        where: eq(schema.logos.file, file)
+export async function getImage(file: string) {
+    return db.query.images.findFirst({
+        where: eq(schema.images.file, file)
     });
 }
 
 export async function deleteLogo(id: number) {
-    return db.delete(schema.logos).where(eq(schema.logos.id, id));
+    return db.delete(schema.images).where(eq(schema.images.id, id));
 }

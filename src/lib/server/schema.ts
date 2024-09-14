@@ -35,7 +35,7 @@ export const websites = pgTable("website", {
     }).notNull().defaultNow(),
 });
 
-export const logos = pgTable("logo", {
+export const images = pgTable("images", {
     id: serial("id").primaryKey(),
     userId: text("user_id").notNull().references(() => users.id),
     file: text("file").notNull(),

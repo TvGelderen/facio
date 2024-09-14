@@ -1,18 +1,23 @@
 <script lang="ts">
-	import EllipsisVertical from "lucide-svelte/icons/ellipsis-vertical";
-	import PanelsTopLeft from "lucide-svelte/icons/panels-top-left";
-	import Pencil from "lucide-svelte/icons/pencil";
-	import Settings from "lucide-svelte/icons/settings";
-	import Trash from "lucide-svelte/icons/trash";
-	import * as Card from "$lib/components/ui/card/index.js";
-	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
-	import * as Dialog from "$lib/components/ui/dialog/index.js";
-	import type { Website } from "$lib/types";
-	import Button from "$lib/components/ui/button/button.svelte";
-	import Input from "$lib/components/ui/input/input.svelte";
+	import {
+		EllipsisVertical,
+		PanelsTopLeft,
+		Pencil,
+		Settings,
+		Trash,
+	} from "lucide-svelte";
+	import * as Card from "$lib/components/ui/card/index";
+	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index";
+	import * as AlertDialog from "$lib/components/ui/alert-dialog/index";
+	import { Input } from "$lib/components/ui/input/index";
 	import { buttonVariants } from "$lib/components/ui/button";
+	import type { Website } from "$lib/types";
 
-	const { website }: { website: Website } = $props();
+	const {
+		website,
+		deleteWebsite,
+	}: { website: Website; deleteWebsite: (id: string) => Promise<void> } =
+		$props();
 
 	const websiteUrl = `/dashboard/${website.id}`;
 
@@ -20,7 +25,7 @@
 	let deleteCommand = $state("");
 </script>
 
-<Dialog.Root>
+<AlertDialog.Root>
 	<Card.Root class="w-[95%] max-w-[600px]">
 		<Card.Header class="relative">
 			<Card.Title>
@@ -55,12 +60,12 @@
 						</DropdownMenu.Item>
 						<DropdownMenu.Separator />
 						<DropdownMenu.Item>
-							<Dialog.Trigger
+							<AlertDialog.Trigger
 								class="flex h-full w-full items-center"
 							>
 								<Trash class="mr-2 h-4 w-4 text-destructive" />
 								<span class="text-destructive">Delete</span>
-							</Dialog.Trigger>
+							</AlertDialog.Trigger>
 						</DropdownMenu.Item>
 					</DropdownMenu.Group>
 				</DropdownMenu.Content>
@@ -85,37 +90,36 @@
 		</Card.Content>
 	</Card.Root>
 
-	<Dialog.Content class="w-[95%] max-w-md">
-		<Dialog.Header>
-			<Dialog.Title>Delete Website</Dialog.Title>
-			<Dialog.Description>
+	<AlertDialog.Content class="w-[95%] max-w-md">
+		<AlertDialog.Header>
+			<AlertDialog.Title>Delete Website</AlertDialog.Title>
+			<AlertDialog.Description>
 				You are about to delete your website:
 				<br />
 				<strong>{website.name}</strong>
 				<br />
 				<br />
 				This action is permanent, if you wish to process, please type '{requiredDeleteCommand}'
-			</Dialog.Description>
-		</Dialog.Header>
-		<form method="post" action={`/api/website/${website.id}/delete`}>
-			<Input
-				id="delete-command"
-				bind:value={deleteCommand}
-				placeholder="sudo delete ..."
-				class="col-span-3"
-			/>
-			<Dialog.Footer class="mt-4">
-				<Dialog.Close class={buttonVariants({ variant: "secondary" })}>
-					Cancel
-				</Dialog.Close>
-				<Button
-					type="submit"
-					variant="destructive"
-					disabled={deleteCommand !== requiredDeleteCommand}
-				>
-					<Trash class="mr-2 h-4 w-4" />Delete Website
-				</Button>
-			</Dialog.Footer>
-		</form>
-	</Dialog.Content>
-</Dialog.Root>
+			</AlertDialog.Description>
+		</AlertDialog.Header>
+		<Input
+			id="delete-command"
+			bind:value={deleteCommand}
+			placeholder="sudo delete ..."
+		/>
+		<AlertDialog.Footer class="mt-2">
+			<AlertDialog.Cancel
+				class={buttonVariants({ variant: "secondary" })}
+			>
+				Cancel
+			</AlertDialog.Cancel>
+			<AlertDialog.Action
+				disabled={deleteCommand !== requiredDeleteCommand}
+				class={`${buttonVariants({ variant: "destructive" })} mt-2`}
+				on:click={() => deleteWebsite(website.id)}
+			>
+				<Trash class="mr-2 h-4 w-4" />Delete Website
+			</AlertDialog.Action>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>

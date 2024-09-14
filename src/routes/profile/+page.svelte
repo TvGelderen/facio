@@ -5,9 +5,16 @@
 	import { Label } from "$lib/components/ui/label/index.js";
 	import { Button } from "$lib/components/ui/button/index.js";
 	import type { ActionData, PageData } from "../profile/$types";
+	import { toast } from "svelte-sonner";
 
 	const { user }: PageData = $page.data as PageData;
 	const form: ActionData = $page.form;
+
+	$effect(() => {
+		if (form?.success) {
+			toast.success("Profile updated successfully");
+		}
+	});
 </script>
 
 <section class="mt-12 flex h-full w-full items-center justify-center">

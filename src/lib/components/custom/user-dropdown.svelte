@@ -1,8 +1,5 @@
 <script lang="ts">
-	import User from "lucide-svelte/icons/user";
-	import CreditCard from "lucide-svelte/icons/credit-card";
-	import LayoutDashboard from "lucide-svelte/icons/layout-dashboard";
-	import LogOut from "lucide-svelte/icons/log-out";
+	import { User, CreditCard, LayoutDashboard, LogOut } from "lucide-svelte";
 	import * as Avatar from "$lib/components/ui/avatar/index.js";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu/index.js";
 

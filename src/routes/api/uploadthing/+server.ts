@@ -1,5 +1,5 @@
 import { env } from "$env/dynamic/private";
-import { deleteLogo, getLogo } from "$lib/server/db";
+import { deleteLogo, getImage } from "$lib/server/db";
 import { fileRouter, utapi } from "$lib/server/uploadthing";
 import { createRouteHandler } from "uploadthing/server";
 import type { RequestEvent } from "./$types";
@@ -23,7 +23,7 @@ export async function DELETE(event: RequestEvent): Promise<Response> {
         return new Response(null, { status: 400 });
     }
 
-    const fileRecord = await getLogo(file);
+    const fileRecord = await getImage(file);
     if (!fileRecord) {
         return new Response(null, { status: 404 });
     }

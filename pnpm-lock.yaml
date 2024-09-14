@@ -53,6 +53,9 @@ importers:
       prettier-plugin-tailwind:
         specifier: ^2.2.12
         version: 2.2.12(prettier@3.3.3)(tailwindcss@3.4.11)
+      svelte-sonner:
+        specifier: ^0.3.28
+        version: 0.3.28(svelte@5.0.0-next.244)
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.5.2
@@ -2506,6 +2509,11 @@ packages:
     peerDependencies:
       svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
 
+  svelte-sonner@0.3.28:
+    resolution: {integrity: sha512-K3AmlySeFifF/cKgsYNv5uXqMVNln0NBAacOYgmkQStLa/UoU0LhfAACU6Gr+YYC8bOCHdVmFNoKuDbMEsppJg==}
+    peerDependencies:
+      svelte: ^3.0.0 || ^4.0.0 || ^5.0.0-next.1
+
   svelte@5.0.0-next.244:
     resolution: {integrity: sha512-whSOcKdpuAFd5xD9J2EhuHeRs4J4nHis6NSUKRXpC3HQoCmsoKhyIldMjiv6QFkQpe6QMsid8lwvgLXkZTSC/A==}
     engines: {node: '>=18'}
@@ -4792,6 +4800,10 @@ snapshots:
       svelte: 5.0.0-next.244
 
   svelte-parse-markup@0.1.5(svelte@5.0.0-next.244):
+    dependencies:
+      svelte: 5.0.0-next.244
+
+  svelte-sonner@0.3.28(svelte@5.0.0-next.244):
     dependencies:
       svelte: 5.0.0-next.244
 
