@@ -35,7 +35,7 @@
 			</DropdownMenu.Item>
 			<DropdownMenu.Separator />
 			<DropdownMenu.Item>
-				<a href="/auth/logout" class="flex items-center">
+				<a href="/api/auth/logout" class="flex items-center">
 					<LogOut class="mr-2 h-4 w-4" />
 					<span>Log out</span>
 				</a>

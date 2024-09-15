@@ -10,7 +10,7 @@
 		</Card.Header>
 		<Card.Content>
 			<div class="flex flex-col gap-4">
-				<Button href="/auth/provider/github" class="w-full gap-2">
+				<Button href="/api/auth/provider/github" class="w-full gap-2">
 					<iconify-icon
 						icon="mdi:github"
 						class="text-2xl"

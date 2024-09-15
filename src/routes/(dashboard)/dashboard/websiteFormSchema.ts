@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const formSchema = z.object({
+export const websiteFormSchema = z.object({
     name: z
         .string({ required_error: "Website name is required" })
         .min(1, { message: "Website name is required" })
@@ -14,4 +14,4 @@ export const formSchema = z.object({
     logo: z.string().optional()
 });
 
-export type FormSchema = typeof formSchema;
+export type FormSchema = typeof websiteFormSchema;

@@ -1,6 +1,11 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import { FileCode2, Image, Pencil, SlidersHorizontal } from "lucide-svelte";
+	import {
+		Image,
+		PanelsTopLeft,
+		Pencil,
+		SlidersHorizontal,
+	} from "lucide-svelte";
 
 	const {
 		collapsed,
@@ -17,13 +22,13 @@
 	<ul class="flex flex-col gap-1">
 		<li>
 			<a
-				href={`/dashboard/${websiteId}/editor`}
-				class={`flex items-center gap-2 rounded p-2 text-base hover:bg-primary/50 lg:text-lg ${$page.url.pathname.includes("/edit") && "bg-primary/50"}`}
+				href={`/dashboard/${websiteId}/pages`}
+				class={`flex items-center gap-2 rounded p-2 text-base hover:bg-primary/50 lg:text-lg ${$page.url.pathname.includes("/pages") && "bg-primary/50"}`}
 				onclick={handleLinkClick}
 			>
-				<FileCode2 class="h-6 w-6" />
+				<PanelsTopLeft class="h-6 w-6" />
 				{#if !collapsed}
-					Editor
+					Pages
 				{/if}
 			</a>
 		</li>

@@ -4,7 +4,7 @@
 	import { Plus } from "lucide-svelte";
 	import { buttonVariants } from "$lib/components/ui/button/index";
 	import * as Dialog from "$lib/components/ui/dialog/index";
-	import { formSchema } from "./formSchema";
+	import { websiteFormSchema } from "./websiteFormSchema";
 	import { superForm } from "sveltekit-superforms";
 	import { zodClient } from "sveltekit-superforms/adapters";
 	import WebsiteCard from "./website-card.svelte";
@@ -14,7 +14,7 @@
 	let { websites, websiteForm }: PageData = $page.data as PageData;
 
 	const form = superForm(websiteForm, {
-		validators: zodClient(formSchema),
+		validators: zodClient(websiteFormSchema),
 	});
 
 	async function deleteWebsite(id: string) {
@@ -54,7 +54,7 @@
 				<div
 					class="flex w-full flex-wrap items-center justify-center gap-4"
 				>
-					{#each websites as website}
+					{#each websites as website (website.id)}
 						<WebsiteCard {website} {deleteWebsite} />
 					{/each}
 					{#if websites.length % 2 !== 0}

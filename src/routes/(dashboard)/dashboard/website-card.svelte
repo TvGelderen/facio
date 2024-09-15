@@ -11,13 +11,15 @@
 	import * as AlertDialog from "$lib/components/ui/alert-dialog/index";
 	import { Input } from "$lib/components/ui/input/index";
 	import { buttonVariants } from "$lib/components/ui/button";
-	import type { Website } from "$lib/types";
+	import type { WebsiteRecord } from "$lib/types";
 
 	const {
 		website,
 		deleteWebsite,
-	}: { website: Website; deleteWebsite: (id: string) => Promise<void> } =
-		$props();
+	}: {
+		website: WebsiteRecord;
+		deleteWebsite: (id: string) => Promise<void>;
+	} = $props();
 
 	const websiteUrl = `/dashboard/${website.id}`;
 
