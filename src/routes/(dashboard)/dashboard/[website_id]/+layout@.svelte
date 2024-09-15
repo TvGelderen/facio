@@ -1,20 +1,12 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import {
-		ChevronsLeft,
-		ChevronsRight,
-		FileCode2,
-		Image,
-		Menu,
-		Pencil,
-		SlidersHorizontal,
-		UploadIcon,
-	} from "lucide-svelte";
+	import { ChevronsLeft, Menu, UploadIcon } from "lucide-svelte";
 	import * as Avatar from "$lib/components/ui/avatar/index";
 	import { Button } from "$lib/components/ui/button/index";
 	import type { LayoutData } from "./$types";
 	import UserDropdown from "$lib/components/custom/user-dropdown.svelte";
 	import ThemeSwitch from "$lib/components/custom/theme-switch.svelte";
+	import WebsiteNav from "./website-nav.svelte";
 
 	const { children } = $props();
 
@@ -24,6 +16,12 @@
 	let sidePanelCollapsed = $state(false);
 
 	const toggleSidePanel = () => (sidePanelCollapsed = !sidePanelCollapsed);
+
+	const handleLinkClick = () => {
+		if (mobile) {
+			sidePanelCollapsed = true;
+		}
+	};
 
 	$effect(() => {
 		mobile = window.innerWidth < 1024;
@@ -48,7 +46,7 @@
 		></div>
 	{/if}
 	<div
-		class={`relative flex flex-col border-r-2 border-r-muted bg-background transition-all ${mobile ? "!absolute inset-y-0 left-0 z-20 w-[95%] max-w-[360px] p-4" : sidePanelCollapsed ? "w-[58px] items-center p-2" : "w-[360px] p-4"} ${mobile && sidePanelCollapsed && "ml-[-360px]"}`}
+		class={`relative flex w-[95%] flex-col border-r-2 border-r-muted bg-background p-2 transition-all ${mobile ? "!absolute inset-y-0 left-0 z-20 max-w-[360px] p-4" : sidePanelCollapsed ? "max-w-[58px] items-center" : "max-w-[360px]"} ${mobile && sidePanelCollapsed && "ml-[-360px]"}`}
 	>
 		<div
 			class={`flex items-center gap-4 ${sidePanelCollapsed && "justify-center"}`}
@@ -61,73 +59,21 @@
 				<h2 class="text-2xl lg:text-3xl">{website.name}</h2>
 			{/if}
 		</div>
-		<nav class="mt-4 w-full">
-			<ul class="flex flex-col gap-1">
-				<li>
-					<a
-						href={`/dashboard/${website.id}/edit`}
-						class={`flex items-center gap-2 rounded p-2 text-sm hover:bg-primary/50 lg:text-base ${$page.url.pathname.includes("/edit") && "bg-primary/50"}`}
-						onclick={toggleSidePanel}
-					>
-						{#if !sidePanelCollapsed}
-							<FileCode2 class="h-6 w-6" />Edit
-						{:else}
-							<FileCode2 class="h-6 w-6" />
-						{/if}
-					</a>
-				</li>
-				<li>
-					<a
-						href={`/dashboard/${website.id}/images`}
-						class={`flex items-center gap-2 rounded p-2 text-sm hover:bg-primary/50 lg:text-base ${$page.url.pathname.includes("/images") && "bg-primary/50"}`}
-						onclick={toggleSidePanel}
-					>
-						{#if !sidePanelCollapsed}
-							<Image class="h-6 w-6" />Images
-						{:else}
-							<Image class="h-6 w-6" />
-						{/if}
-					</a>
-				</li>
-				<li>
-					<a
-						href={`/dashboard/${website.id}/details`}
-						class={`flex items-center gap-2 rounded p-2 text-sm hover:bg-primary/50 lg:text-base ${$page.url.pathname.includes("/details") && "bg-primary/50"}`}
-						onclick={toggleSidePanel}
-					>
-						{#if !sidePanelCollapsed}
-							<Pencil class="h-6 w-6" />Details
-						{:else}
-							<Pencil class="h-6 w-6" />
-						{/if}
-					</a>
-				</li>
-				<li>
-					<a
-						href={`/dashboard/${website.id}/settings`}
-						class={`flex items-center gap-2 rounded p-2 text-sm hover:bg-primary/50 lg:text-base ${$page.url.pathname.includes("/settings") && "bg-primary/50"}`}
-						onclick={toggleSidePanel}
-					>
-						{#if !sidePanelCollapsed}
-							<SlidersHorizontal class="h-6 w-6" />Settings
-						{:else}
-							<SlidersHorizontal class="h-6 w-6" />
-						{/if}
-					</a>
-				</li>
-			</ul>
-		</nav>
+		<WebsiteNav
+			collapsed={sidePanelCollapsed}
+			websiteId={website.id}
+			{handleLinkClick}
+		/>
 
 		<Button
 			variant="ghost"
 			class="absolute bottom-1 right-1 p-2"
 			on:click={toggleSidePanel}
 		>
-			{#if sidePanelCollapsed}
-				<ChevronsRight class="h-8 w-8" />
-			{:else}
-				<ChevronsLeft class="h-8 w-8" />
-			{/if}
+			<ChevronsLeft
+				class="h-8 w-8 transition-all"
+				style={`${sidePanelCollapsed && "transform: scale(-1, 1)"}`}
+			/>
 		</Button>
 	</div>
 

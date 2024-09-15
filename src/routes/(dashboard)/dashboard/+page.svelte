@@ -52,11 +52,14 @@
 				</Dialog.Trigger>
 			{:else}
 				<div
-					class="flex w-full flex-wrap items-center justify-center gap-8"
+					class="flex w-full flex-wrap items-center justify-center gap-4"
 				>
 					{#each websites as website}
 						<WebsiteCard {website} {deleteWebsite} />
 					{/each}
+					{#if websites.length % 2 !== 0}
+						<div class="w-[95%] max-w-[600px]"></div>
+					{/if}
 				</div>
 			{/if}
 		</div>

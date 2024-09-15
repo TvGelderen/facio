@@ -1,0 +1,91 @@
+import type * as CSS from "csstype";
+
+export type EditorElement = {
+    id: string;
+    name: string;
+    type: ElementType;
+    styles: CSS.Properties;
+    content: EditorElement[] | {};
+}
+
+export type EditorState = {
+    elements: EditorElement[];
+    selectedElement: EditorElement | null;
+    device: Device;
+}
+
+// TODO: Optimize for memory use, think about maybe using events, rather than storing entire editor states
+// type EditorEvent = {
+//      action: EditorAction;
+//      undo: EditorAction;
+// }
+
+export enum ElementType {
+    Body = '__body',
+    Section = 'section',
+    Container = 'container',
+    Text = 'text',
+    Link = 'link',
+    Image = 'image',
+};
+
+export enum Device {
+    Desktop = 'Desktop',
+    Mobile = 'Mobile',
+    Tablet = 'Tablet',
+}
+
+export enum EditorActionType {
+    AddElement = 'ADD_ELEMENT',
+    UpdateElement = 'UPDATE_ELEMENT',
+    DeleteElement = 'DELETE_ELEMENT',
+    UpdateSelectedElement = 'UPDATE_SELECTED_ELEMENT',
+    ChangeDevice = 'CHANGE_DEVICE',
+    Undo = 'UNDO',
+    Redo = 'REDO',
+    LoadData = 'LOAD_DATA',
+}
+
+export type EditorAction =
+    | AddElementAction
+    | UpdateElementAction
+    | DeleteElementAction
+    | UpdateSelectedElementAction
+    | ChangeDeviceAction
+    | UndoAction
+    | RedoAction;
+
+export type AddElementAction = {
+    type: EditorActionType.AddElement;
+    parentId: string;
+    element: EditorElement;
+}
+
+export type UpdateElementAction = {
+    type: EditorActionType.UpdateElement;
+    element: EditorElement;
+}
+
+export type DeleteElementAction = {
+    type: EditorActionType.DeleteElement;
+    parentId: string;
+    element: EditorElement;
+}
+
+export type UpdateSelectedElementAction = {
+    type: EditorActionType.UpdateSelectedElement;
+    element: EditorElement;
+}
+
+export type ChangeDeviceAction = {
+    type: EditorActionType.ChangeDevice;
+    device: Device;
+}
+
+export type UndoAction = {
+    type: EditorActionType.Undo;
+}
+
+export type RedoAction = {
+    type: EditorActionType.Redo;
+}

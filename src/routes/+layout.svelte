@@ -7,6 +7,10 @@
 	const { children } = $props();
 </script>
 
+<svelte:head>
+	<title>Pagegen</title>
+</svelte:head>
+
 <ModeWatcher />
 
 <Toaster />
