@@ -12,6 +12,7 @@ export type EditorState = {
     elements: EditorElement[];
     selectedElement: EditorElement | null;
     device: Device;
+    preview: boolean;
 }
 
 // TODO: Optimize for memory use, think about maybe using events, rather than storing entire editor states
@@ -44,6 +45,7 @@ export enum EditorActionType {
     Undo = 'UNDO',
     Redo = 'REDO',
     LoadData = 'LOAD_DATA',
+    TogglePreviewMode = 'TOGGLE_PREVIEW_MODE',
 }
 
 export type EditorAction =
@@ -53,7 +55,8 @@ export type EditorAction =
     | UpdateSelectedElementAction
     | ChangeDeviceAction
     | UndoAction
-    | RedoAction;
+    | RedoAction
+    | ToggleLiveModeAction;
 
 export type AddElementAction = {
     type: EditorActionType.AddElement;
@@ -88,4 +91,8 @@ export type UndoAction = {
 
 export type RedoAction = {
     type: EditorActionType.Redo;
+}
+
+export type ToggleLiveModeAction = {
+    type: EditorActionType.TogglePreviewMode;
 }

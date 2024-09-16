@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { page } from "$app/stores";
-	import ThemeSwitch from "$lib/components/custom/theme-switch.svelte";
-	import UserDropdown from "$lib/components/custom/user-dropdown.svelte";
+	import HeaderRight from "$lib/components/custom/header-right.svelte";
 	import type { LayoutData } from "./$types";
 
 	const { children } = $props();
@@ -14,10 +13,7 @@
 </svelte:head>
 
 <header class="flex justify-end p-4">
-	<div class="flex items-center justify-center gap-4">
-		<UserDropdown avatar={user.avatar} />
-		<ThemeSwitch />
-	</div>
+	<HeaderRight {user} />
 </header>
 
 <main>

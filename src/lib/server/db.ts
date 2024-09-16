@@ -4,9 +4,8 @@ import postgres from 'postgres';
 import * as schema from './schema';
 import { eq, sql } from 'drizzle-orm';
 import { generateIdFromEntropySize } from 'lucia';
-import type { Page, PageRecord, Website } from '$lib/types';
+import type { Page, Website } from '$lib/types';
 import { error } from '@sveltejs/kit';
-import { page } from '$app/stores';
 
 export const client = postgres({
     host: DB_HOST,
@@ -21,7 +20,7 @@ export const db = drizzle(client, { schema });
 export function getUserById(id: string) {
     return db.query.users.findFirst({
         where: eq(schema.users.id, id)
-    })
+    });
 }
 
 export function insertUser(id: string, provider: string, provider_id: string, username: string, email: string | null, avatar: string | null) {
@@ -121,6 +120,13 @@ export async function getPage(id: string): Promise<Page> {
     }
 
     return page;
+}
+
+export function updatePageName(id: string, name: string) {
+    return db.update(schema.pages).set({
+        name,
+        updatedAt: sql`NOW()`
+    }).where(eq(schema.pages.id, id));
 }
 
 export function insertImage(userId: string, file: string, url: string) {

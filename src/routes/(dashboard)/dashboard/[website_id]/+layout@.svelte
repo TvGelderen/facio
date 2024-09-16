@@ -4,9 +4,8 @@
 	import * as Avatar from "$lib/components/ui/avatar/index";
 	import { Button } from "$lib/components/ui/button/index";
 	import type { LayoutData } from "./$types";
-	import UserDropdown from "$lib/components/custom/user-dropdown.svelte";
-	import ThemeSwitch from "$lib/components/custom/theme-switch.svelte";
 	import WebsiteNav from "./website-nav.svelte";
+	import HeaderRight from "$lib/components/custom/header-right.svelte";
 
 	const { children } = $props();
 
@@ -90,10 +89,7 @@
 					<Menu class="h-8 w-8" />
 				</Button>
 			{/if}
-			<div class="flex items-center justify-center gap-4">
-				<UserDropdown avatar={user.avatar} />
-				<ThemeSwitch />
-			</div>
+			<HeaderRight {user} />
 		</header>
 
 		<main class="h-[calc(100dvh_-_58px)] w-full bg-secondary/50 p-4">

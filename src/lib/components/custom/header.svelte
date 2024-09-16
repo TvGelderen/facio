@@ -1,8 +1,6 @@
 <script lang="ts">
 	import type { User } from "lucia";
-	import ThemeSwitch from "./theme-switch.svelte";
-	import UserDropdown from "./user-dropdown.svelte";
-	import { Button } from "$lib/components/ui/button/index.js";
+	import HeaderRight from "./header-right.svelte";
 
 	const {
 		user,
@@ -27,12 +25,5 @@
 		</ul>
 	</nav>
 
-	<div class="flex items-center justify-center gap-4">
-		{#if user}
-			<UserDropdown avatar={user.avatar} />
-		{:else}
-			<Button href="/login">Login</Button>
-		{/if}
-		<ThemeSwitch />
-	</div>
+	<HeaderRight {user} />
 </header>
