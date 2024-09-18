@@ -2,11 +2,13 @@
 	import * as Tabs from "$lib/components/ui/tabs/index.js";
 	import { Database, Layers, Plus, Settings } from "lucide-svelte";
 	import SettingsTab from "./settings-tab.svelte";
+
+	const { hidden }: { hidden: boolean } = $props();
 </script>
 
 <Tabs.Root value="settings" orientation="vertical">
 	<div
-		class="relative flex h-full w-[380px] items-start border-l-2 border-l-muted"
+		class={`relative flex h-full w-[380px] items-start border-l-2 border-l-muted transition-all duration-300 ${hidden && "mr-[-380px]"}`}
 	>
 		<div class="w-full">
 			<Tabs.Content value="settings" class="px-2">

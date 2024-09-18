@@ -1,17 +1,19 @@
 <script lang="ts">
-	import { ElementType, type EditorElement } from "./types";
+	import { ElementType, type EditorElement } from "../types";
+	import Container from "./container.svelte";
+	import Text from "./text.svelte";
 
 	const { element }: { element: EditorElement } = $props();
 </script>
 
 {#if element.type === ElementType.Body}
-	<body></body>
+	<Container {element} />
 {:else if element.type === ElementType.Section}
-	<div></div>
+	<Container {element} />
 {:else if element.type === ElementType.Container}
-	<div></div>
+	<Container {element} />
 {:else if element.type === ElementType.Text}
-	<p>Text</p>
+	<Text {element} />
 {:else if element.type === ElementType.Link}
 	<a href="/">Link</a>
 {:else if element.type === ElementType.Image}

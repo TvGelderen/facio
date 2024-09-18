@@ -51,7 +51,7 @@
 </svelte:head>
 
 <header
-	class="flex h-[58px] items-center justify-between border-b-2 border-b-muted px-2"
+	class={`absolute left-0 right-0 top-0 z-10 flex h-[58px] items-center justify-between border-b-2 border-b-muted bg-background px-2 transition-all duration-300 ${editor.live && "top-[-58px]"}`}
 >
 	<div class="flex items-center gap-4">
 		<Button
@@ -104,7 +104,7 @@
 				</Tabs.Trigger>
 			</Tabs.List>
 		</Tabs.Root>
-		<Button variant="ghost" class="p-2" onclick={editor.togglePreview}>
+		<Button variant="ghost" class="p-2" onclick={editor.toggleView}>
 			{#if editor.preview}
 				<EyeOff />
 			{:else}
@@ -114,6 +114,8 @@
 	</div>
 </header>
 
-<main class="flex h-[calc(100dvh_-_58px)] w-full items-center justify-center">
+<main
+	class={`flex w-full items-center justify-center ${editor.live ? "mt-0 h-dvh" : "mt-[58px] h-[calc(100dvh_-_58px)]"}`}
+>
 	{@render children()}
 </main>

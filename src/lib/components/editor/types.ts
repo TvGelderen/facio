@@ -2,10 +2,11 @@ import type * as CSS from "csstype";
 
 export type EditorElement = {
     id: string;
+    parentId: string;
     name: string;
     type: ElementType;
     styles: CSS.Properties;
-    content: EditorElement[] | { href?: string };
+    content: EditorElement[] | { href?: string, innerText?: string };
 }
 
 export type EditorState = {

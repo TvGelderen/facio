@@ -70,7 +70,10 @@ export function createEditor() {
         historyIndex++;
     }
 
-    const togglePreview = () => (preview = !preview);
+    const toggleView = () => {
+        preview = !preview
+        live = !live
+    };
     const undo = () => handleAction({ type: EditorActionType.Undo });
     const redo = () => handleAction({ type: EditorActionType.Redo });
 
@@ -106,7 +109,7 @@ export function createEditor() {
         get historyIndex() { return historyIndex },
         set historyIndex(value: number) { historyIndex = value },
         handleAction,
-        togglePreview,
+        toggleView,
         undo,
         redo,
         changeDevice,
