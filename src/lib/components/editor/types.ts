@@ -5,7 +5,7 @@ export type EditorElement = {
     name: string;
     type: ElementType;
     styles: CSS.Properties;
-    content: EditorElement[] | {};
+    content: EditorElement[] | { href?: string };
 }
 
 export type EditorState = {
@@ -77,7 +77,7 @@ export type DeleteElementAction = {
 
 export type UpdateSelectedElementAction = {
     type: EditorActionType.UpdateSelectedElement;
-    element: EditorElement;
+    element: EditorElement | null;
 }
 
 export type ChangeDeviceAction = {

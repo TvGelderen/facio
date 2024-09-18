@@ -7,18 +7,19 @@
 		Smartphone,
 		Tablet,
 		Undo,
+		ArrowLeft,
 	} from "lucide-svelte";
 	import { page } from "$app/stores";
 	import { toast } from "svelte-sonner";
 	import type { LayoutData } from "./$types";
 	import Button from "$lib/components/ui/button/button.svelte";
-	import { ArrowLeft } from "lucide-svelte";
 	import Input from "$lib/components/ui/input/input.svelte";
-	import { setEditorState } from "./editor-context.svelte";
-	import ThemeSwitch from "$lib/components/custom/theme-switch.svelte";
-	import { Device } from "./types";
 	import * as Tabs from "$lib/components/ui/tabs/index";
-	import { getEditorState } from "./editor-context.svelte";
+	import {
+		setEditorState,
+		getEditorState,
+	} from "$lib/components/editor/editor-context.svelte";
+	import { Device } from "$lib/components/editor/types";
 
 	const { children } = $props();
 

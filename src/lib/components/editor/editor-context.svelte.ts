@@ -15,6 +15,7 @@ export function createEditor() {
     let selectedElement = $state<EditorElement | null>(null);
     let device = $state<Device>(Device.Desktop);
     let preview = $state<boolean>(false);
+    let live = $state<boolean>(false);
     let history = $state<EditorState[]>([]);
     let historyIndex = $state<number>(0);
 
@@ -98,6 +99,8 @@ export function createEditor() {
         set device(value: Device) { device = value },
         get preview() { return preview },
         set preview(value: boolean) { preview = value },
+        get live() { return live },
+        set live(value: boolean) { live = value },
         get history() { return history },
         set history(value: EditorState[]) { history = value },
         get historyIndex() { return historyIndex },
