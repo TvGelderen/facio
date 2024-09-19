@@ -8,8 +8,7 @@
 	import VerticalAlignInput from "./inputs/vertical-align-input.svelte";
 	import TextAlignInput from "./inputs/text-align-input.svelte";
 	import FontStyleInput from "./inputs/font-style-input.svelte";
-	import Label from "$lib/components/ui/label/label.svelte";
-	import MarginInput from "./inputs/margin-input.svelte";
+	import PaddingInput from "./inputs/padding-input.svelte";
 
 	const editor = getEditorState();
 
@@ -49,10 +48,6 @@
 </script>
 
 <h2 class="text-lg lg:text-xl">Settings</h2>
-
-<span class="text-muted-foreground">
-	Customize every component on your page from this tab.
-</span>
 
 <Accordion.Root
 	multiple
@@ -104,7 +99,15 @@
 					type="number"
 					placeholder="12"
 					unit="px"
-					{handleChange}
+					handleChange={(event: Event) => {
+						if (!(event.target instanceof HTMLInputElement)) {
+							return;
+						}
+						handleCustomChange(
+							"font-size",
+							`${event.target.value}px`,
+						);
+					}}
 				/>
 			</div>
 		</Accordion.Content>
@@ -116,7 +119,7 @@
 				<ValueInput
 					label="Width"
 					id="width"
-					value={editor.selectedElement?.styles.color}
+					value={editor.selectedElement?.styles.width}
 					type="string"
 					placeholder="auto"
 					className="flex flex-col"
@@ -125,15 +128,15 @@
 				<ValueInput
 					label="Height"
 					id="height"
-					value={editor.selectedElement?.styles.color}
+					value={editor.selectedElement?.styles.width}
 					type="string"
 					placeholder="auto"
 					className="flex flex-col"
 					{handleChange}
 				/>
-				<MarginInput
+				<PaddingInput
 					styles={editor.selectedElement?.styles}
-					{handleChange}
+					{handleCustomChange}
 				/>
 			</div>
 		</Accordion.Content>
@@ -141,7 +144,14 @@
 	<Accordion.Item value="styles">
 		<Accordion.Trigger class="!no-underline">Styles</Accordion.Trigger>
 		<Accordion.Content class="p-1">
-			<div>Style settings.</div>
+			<ValueInput
+				label="Background"
+				id="background"
+				value={editor.selectedElement?.styles.background}
+				type="string"
+				placeholder="transparent"
+				{handleChange}
+			/>
 		</Accordion.Content>
 	</Accordion.Item>
 	<Accordion.Item value="layout">

@@ -2,11 +2,7 @@
 	import Button from "$lib/components/ui/button/button.svelte";
 	import { Trash } from "lucide-svelte";
 	import { getEditorState } from "../editor-context.svelte";
-	import {
-		EditorActionType,
-		ElementType,
-		type EditorElement,
-	} from "../types";
+	import { EditorActionType, type EditorElement } from "../types";
 	import { handleDeleteElement, handleSelectElement } from "./functions";
 
 	const { element }: { element: EditorElement } = $props();
@@ -31,11 +27,17 @@
 		});
 	}
 
+	function onkeypress(event: KeyboardEvent) {
+		if (event.key === "Enter") {
+			event.preventDefault();
+		}
+	}
+
 	const select = (event: Event) =>
 		handleSelectElement(event, editor.handleAction, element);
 
 	$effect(() => {
-		console.log("style change");
+		console.log(element.styles);
 		if (ref) {
 			Object.assign(ref.style, element.styles);
 		}
@@ -44,11 +46,11 @@
 
 <div
 	id={element.id}
-	class={`relative m-[5px] w-full p-[2px] text-[16px] ${
+	class={`relative h-fit w-full p-1 leading-none ${
 		!editor.live
 			? editor.selectedElement?.id === element.id
-				? "rounded-md border border-primary"
-				: "border border-dashed border-slate-300"
+				? "border-2 border-primary"
+				: "border-2 border-dashed border-muted-foreground"
 			: ""
 	}`}
 	onclick={select}
@@ -58,19 +60,21 @@
 	bind:this={ref}
 >
 	{#if !editor.live && editor.selectedElement?.id === element.id}
-		<div class="absolute left-[-1px] top-[-23px] rounded-t-md bg-primary">
+		<div
+			class="absolute left-[-2px] top-[-24px] bg-primary px-[4px] py-[2px] text-sm text-white"
+		>
 			{editor.selectedElement.name}
 		</div>
 		<Button
 			variant="destructive"
-			class="absolute right-[-1px] top-[-23px] h-8 w-8 rounded-t-md bg-primary"
+			class="absolute right-[-2px] top-[-24px] h-6 w-6 rounded-none p-0"
 			onclick={() => handleDeleteElement(editor.handleAction, element)}
 		>
-			<Trash />
+			<Trash class="h-4 w-4 text-white" />
 		</Button>
 	{/if}
 
-	<span contenteditable={!editor.live} {onblur}>
+	<span contenteditable={!editor.live} {onblur} {onkeypress} role="form">
 		{#if !Array.isArray(element.content) && element.content.innerText}
 			{element.content.innerText}
 		{/if}

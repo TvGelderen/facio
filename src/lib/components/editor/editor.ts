@@ -38,7 +38,8 @@ export function deleteElement(elements: EditorElement[], action: DeleteElementAc
     return elements.filter((item) => {
         if (item.id === action.element.id) {
             return false;
-        } else if (item.content && Array.isArray(item.content)) {
+        }
+        if (item.content && Array.isArray(item.content)) {
             item.content = deleteElement(item.content, action);
         }
         return true;

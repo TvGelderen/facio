@@ -91,8 +91,8 @@
 			? editor.selectedElement?.id === element.id
 				? body
 					? "border-2 border-red-500/50"
-					: "border border-primary"
-				: "border border-dashed border-muted-foreground"
+					: "border-2 border-primary"
+				: "border-2 border-dashed border-muted-foreground"
 			: ""
 	} ${body && "h-full"} ${!body && "h-fit"}`}
 	draggable={!body}
@@ -106,13 +106,15 @@
 	bind:this={ref}
 >
 	{#if !editor.live && editor.selectedElement?.id === element.id}
-		<div class="absolute left-0 top-0 bg-primary px-[4px] py-[2px] text-sm">
+		<div
+			class="absolute left-[-2px] top-[-24px] bg-primary px-[4px] py-[2px] text-sm"
+		>
 			{editor.selectedElement.name}
 		</div>
-		{#if body}
+		{#if !body}
 			<Button
 				variant="destructive"
-				class="absolute right-0 top-0 h-6 w-6 rounded-none p-0"
+				class="absolute right-[-2px] top-[-24px] h-6 w-6 rounded-none p-0"
 				onclick={() =>
 					handleDeleteElement(editor.handleAction, element)}
 			>

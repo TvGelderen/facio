@@ -6,10 +6,10 @@
 
 	const {
 		styles,
-		handleChange,
+		handleCustomChange,
 	}: {
 		styles: CSS.Properties | undefined;
-		handleChange: (event: Event) => void;
+		handleCustomChange: (style: string, value: string) => void;
 	} = $props();
 </script>
 
@@ -42,7 +42,7 @@
 			unit="px"
 			type="number"
 			placeholder="0"
-			{handleChange}
+			{handleCustomChange}
 		/>
 	</Tooltip.Trigger>
 	<Tooltip.Content>Padding Left</Tooltip.Content>
@@ -75,7 +75,7 @@
 			unit="px"
 			type="number"
 			placeholder="0"
-			{handleChange}
+			{handleCustomChange}
 		/>
 	</Tooltip.Trigger>
 	<Tooltip.Content>Padding Top</Tooltip.Content>
@@ -108,7 +108,7 @@
 			unit="px"
 			type="number"
 			placeholder="0"
-			{handleChange}
+			{handleCustomChange}
 		/>
 	</Tooltip.Trigger>
 	<Tooltip.Content>Padding Right</Tooltip.Content>
@@ -141,7 +141,7 @@
 			unit="px"
 			type="number"
 			placeholder="0"
-			{handleChange}
+			{handleCustomChange}
 		/>
 	</Tooltip.Trigger>
 	<Tooltip.Content>Padding Bottom</Tooltip.Content>
