@@ -42,7 +42,7 @@ export function newLinkElement(parentId: string) {
             color: "black",
         },
         content: {
-            innerText: "Text",
+            innerText: "Link",
             href: "#"
         }
     };

@@ -18,14 +18,15 @@
 
 	const { element }: { element: EditorElement } = $props();
 
-	let ref = $state<HTMLElement | null>(null);
-
 	const editor = getEditorState();
+	const body = element.type === ElementType.Body;
+
+	let ref = $state<HTMLElement | null>(null);
 
 	const select = (event: Event) =>
 		handleSelectElement(event, editor.handleAction, element);
 
-	function handleDrop(event: DragEvent) {
+	function ondrop(event: DragEvent) {
 		event.stopPropagation();
 
 		if (event.dataTransfer === null) {
@@ -64,14 +65,14 @@
 		}
 	}
 
-	function handleDragStart(event: DragEvent) {
-		if (element.type === ElementType.Body || event.dataTransfer === null) {
+	function ondragstart(event: DragEvent) {
+		if (body || event.dataTransfer === null) {
 			return;
 		}
 		event.dataTransfer.setData("component-type", element.type);
 	}
 
-	function handleDragOver(event: Event) {
+	function ondragover(event: Event) {
 		event.preventDefault();
 	}
 
@@ -85,19 +86,19 @@
 
 <div
 	id={element.id}
-	class={`relative m-[5px] w-full p-[2px] text-[16px] ${
+	class={`relative z-10 text-[16px] ${
 		!editor.live
 			? editor.selectedElement?.id === element.id
-				? element.type === ElementType.Body
-					? "boder-red-500 border"
+				? body
+					? "border-2 border-red-500/50"
 					: "border border-primary"
-				: "border border-dashed border-slate-300"
+				: "border border-dashed border-muted-foreground"
 			: ""
-	} ${element.type === ElementType.Body && "h-full"} ${element.type === ElementType.Container && "h-fit"}`}
-	draggable={element.type !== ElementType.Body}
-	ondrop={handleDrop}
-	ondragstart={handleDragStart}
-	ondragover={handleDragOver}
+	} ${body && "h-full"} ${!body && "h-fit"}`}
+	draggable={!body}
+	{ondrop}
+	{ondragstart}
+	{ondragover}
 	onclick={select}
 	onkeypress={select}
 	role="button"
@@ -105,16 +106,19 @@
 	bind:this={ref}
 >
 	{#if !editor.live && editor.selectedElement?.id === element.id}
-		<div class="absolute left-[-1px] top-[-23px] rounded-t-md bg-primary">
+		<div class="absolute left-0 top-0 bg-primary px-[4px] py-[2px] text-sm">
 			{editor.selectedElement.name}
 		</div>
-		<Button
-			variant="destructive"
-			class="absolute right-[-1px] top-[-23px] h-8 w-8 rounded-t-md bg-primary"
-			onclick={() => handleDeleteElement(editor.handleAction, element)}
-		>
-			<Trash />
-		</Button>
+		{#if body}
+			<Button
+				variant="destructive"
+				class="absolute right-0 top-0 h-6 w-6 rounded-none p-0"
+				onclick={() =>
+					handleDeleteElement(editor.handleAction, element)}
+			>
+				<Trash class="h-4 w-4 text-white" />
+			</Button>
+		{/if}
 	{/if}
 
 	{#if Array.isArray(element.content)}

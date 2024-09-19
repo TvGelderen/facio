@@ -6,9 +6,12 @@ export function createEditor() {
     let elements = $state<EditorElement[]>([
         {
             id: "__body",
+            parentId: "",
             name: "Body",
             type: ElementType.Body,
-            styles: {},
+            styles: {
+                background: "#181818",
+            },
             content: [],
         },
     ]);

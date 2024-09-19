@@ -2,7 +2,11 @@
 	import Button from "$lib/components/ui/button/button.svelte";
 	import { Trash } from "lucide-svelte";
 	import { getEditorState } from "../editor-context.svelte";
-	import { EditorActionType, type EditorElement } from "../types";
+	import {
+		EditorActionType,
+		ElementType,
+		type EditorElement,
+	} from "../types";
 	import { handleDeleteElement, handleSelectElement } from "./functions";
 
 	const { element }: { element: EditorElement } = $props();
