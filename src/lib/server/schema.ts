@@ -1,5 +1,5 @@
 import { relations } from "drizzle-orm";
-import { pgTable, serial, text, timestamp, unique } from "drizzle-orm/pg-core";
+import { jsonb, pgTable, serial, text, timestamp, unique } from "drizzle-orm/pg-core";
 
 export const users = pgTable("users", {
     id: text("id").primaryKey(),
@@ -41,8 +41,12 @@ export const websites = pgTable("website", {
     }).notNull().defaultNow(),
 });
 
-export const websitesRelations = relations(websites, ({ many }) => ({
-    pages: many(pages),
+export const websitesRelations = relations(websites, ({ one, many }) => ({
+    user: one(users, {
+        fields: [websites.userId],
+        references: [users.id]
+    }),
+    pages: many(pages)
 }));
 
 export const pages = pgTable("page", {
@@ -67,6 +71,28 @@ export const pagesRelations = relations(pages, ({ one }) => ({
         fields: [pages.websiteId],
         references: [websites.id]
     }),
+    pageLayout: one(pageLayouts)
+}));
+
+export const pageLayouts = pgTable("page_layout", {
+    id: serial("id").primaryKey(),
+    pageId: text("page_id").notNull().references(() => pages.id, { onDelete: "cascade" }),
+    elements: jsonb("elements"),
+    createdAt: timestamp("created_at", {
+        withTimezone: true,
+        mode: "date"
+    }).notNull().defaultNow(),
+    updatedAt: timestamp("updated_at", {
+        withTimezone: true,
+        mode: "date"
+    }).notNull().defaultNow()
+});
+
+export const pageLayoutRelations = relations(pageLayouts, ({ one }) => ({
+    page: one(pages, {
+        fields: [pageLayouts.pageId],
+        references: [pages.id]
+    })
 }));
 
 export const images = pgTable("images", {

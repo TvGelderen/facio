@@ -8,6 +8,7 @@
 		Tablet,
 		Undo,
 		ArrowLeft,
+		Save,
 	} from "lucide-svelte";
 	import { page } from "$app/stores";
 	import { toast } from "svelte-sonner";
@@ -24,8 +25,17 @@
 	const { children } = $props();
 
 	const { data }: LayoutData = $page.data as LayoutData;
+	const { page_id } = $page.params;
 
 	let name = $state(data.name);
+
+	setEditorState();
+
+	const editor = getEditorState();
+
+	if (data.pageLayout !== null && data.pageLayout.elements.length > 0) {
+		editor.elements = data.pageLayout.elements;
+	}
 
 	async function savePageName() {
 		if (name === data.name) return;
@@ -41,9 +51,15 @@
 		toast.success("Page name updated successfully");
 	}
 
-	setEditorState();
-
-	const editor = getEditorState();
+	async function savePageLayout() {
+		try {
+			await editor.saveState(page_id);
+			toast.success("Page saved successfully");
+		} catch (err) {
+			console.error(err);
+			toast.error("Something went wrong saving the current page");
+		}
+	}
 </script>
 
 <svelte:head>
@@ -110,6 +126,9 @@
 			{:else}
 				<Eye />
 			{/if}
+		</Button>
+		<Button class="ml-4 p-2" onclick={savePageLayout}>
+			<Save class="mr-2" />Save
 		</Button>
 	</div>
 </header>

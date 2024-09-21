@@ -200,6 +200,16 @@ export function createEditor() {
         };
     }
 
+    function saveState(pageId: string) {
+        return fetch(`/api/page/${pageId}`, {
+            method: "POST",
+            body: JSON.stringify({ elements }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+    }
+
     return {
         get elements() { return elements },
         set elements(value: EditorElement[]) { elements = value },
@@ -226,6 +236,7 @@ export function createEditor() {
         redo,
         changeDevice,
         getState,
+        saveState,
     }
 }
 

@@ -6,6 +6,7 @@ import { eq, sql } from 'drizzle-orm';
 import { generateIdFromEntropySize } from 'lucia';
 import type { Page, Website } from '$lib/types';
 import { error } from '@sveltejs/kit';
+import type { EditorElement } from '$lib/components/editor/types';
 
 export const client = postgres({
     host: DB_HOST,
@@ -112,14 +113,15 @@ export async function getPage(id: string): Promise<Page> {
     const page = await db.query.pages.findFirst({
         where: eq(schema.pages.id, id),
         with: {
-            website: true
+            website: true,
+            pageLayout: true,
         }
     });
     if (!page) {
         throw error(404);
     }
 
-    return page;
+    return page as Page;
 }
 
 export function updatePageName(id: string, name: string) {
@@ -127,6 +129,22 @@ export function updatePageName(id: string, name: string) {
         name,
         updatedAt: sql`NOW()`
     }).where(eq(schema.pages.id, id));
+}
+
+export function insertPageLayout(pageId: string, elements: EditorElement[]) {
+    return db.insert(schema.pageLayouts).values({
+        pageId,
+        elements,
+        createdAt: sql`NOW()`,
+        updatedAt: sql`NOW()`,
+    });
+}
+
+export function updatePageLayout(id: number, elements: EditorElement[]) {
+    return db.update(schema.pageLayouts).set({
+        elements,
+        updatedAt: sql`NOW()`,
+    }).where(eq(schema.pageLayouts.id, id));
 }
 
 export function insertImage(userId: string, file: string, url: string) {

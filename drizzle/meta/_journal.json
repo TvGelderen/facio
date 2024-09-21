@@ -8,6 +8,20 @@
       "when": 1726419858959,
       "tag": "0000_bumpy_doorman",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1726940749847,
+      "tag": "0001_bumpy_wendell_vaughn",
+      "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1726940909093,
+      "tag": "0002_chemical_kid_colt",
+      "breakpoints": true
     }
   ]
 }
