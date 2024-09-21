@@ -81,6 +81,8 @@ export function createEditor() {
     }
 
     function handleDragStart(event: DragEvent, element: EditorElement, reference: HTMLElement) {
+        event.stopPropagation();
+
         selectedElement = null;
         dragging = true;
         draggedElement = element;
@@ -88,18 +90,20 @@ export function createEditor() {
     }
 
     function handleDragOver(event: DragEvent, element: EditorElement, reference: HTMLElement) {
-        event.preventDefault();
-
-        if (draggedElement === null) {
+        if (draggedElementRef === null || draggedElementRef.contains(reference)) {
+            console.log("return");
             return;
         }
+
+        event.stopPropagation();
+        event.preventDefault();
 
         if (dropTarget !== element) {
             dropTarget = element;
             dropTargetRef = reference;
         }
 
-        if (draggedElementRef === null || dropTarget === null || dropTargetRef === null) {
+        if (dropTarget === null || dropTargetRef === null) {
             return;
         }
 
@@ -114,24 +118,31 @@ export function createEditor() {
             const middleY = rect.top + rect.height / 2;
 
             if (child.previousElementSibling === null) {
+                console.log("child.previousElementSibling === null")
                 if (child.nextElementSibling !== null) {
+                    console.log("child.nextElementSibling !== null")
                     const nextRect = child.nextElementSibling.getBoundingClientRect();
                     const vertical = rect.bottom <= nextRect.top;
                     if ((vertical && middleY > event.clientY) || (!vertical && middleX > event.clientX)) {
+                        console.log("above first")
                         dropTargetRef.insertBefore(draggedElementRef, child);
                         return;
                     }
                 } else {
+                    console.log("only one child")
                     dropTargetRef.appendChild(draggedElementRef);
                     return;
                 }
             }
 
             if (child.nextElementSibling !== null) {
+                console.log("child.nextElementSibling !== null")
                 if (child.nextElementSibling === draggedElementRef) {
+                    console.log("child.nextElementSibling === draggedElementRef")
                     continue;
                 }
                 if (isBetween(rect, child.nextElementSibling.getBoundingClientRect(), event.clientX, event.clientY)) {
+                    console.log("isBetween")
                     dropTargetRef.insertBefore(draggedElementRef, child.nextElementSibling);
                     return;
                 }
@@ -139,9 +150,11 @@ export function createEditor() {
             }
 
             if (child.previousElementSibling !== null) {
+                console.log("child.previousElementSibling !== null")
                 const prevRect = child.previousElementSibling.getBoundingClientRect();
                 const vertical = prevRect.bottom <= rect.top;
                 if ((vertical && middleY < event.clientY) || (!vertical && middleX < event.clientX)) {
+                    console.log("below last element")
                     dropTargetRef.appendChild(draggedElementRef);
                     return;
                 }

@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Type } from "lucide-svelte";
+	import { BoxSelect, Type } from "lucide-svelte";
 
 	function ondragstart(event: DragEvent) {
 		if (
@@ -24,5 +24,14 @@
 		class="flex h-10 w-10 items-center justify-center rounded-md bg-muted"
 	>
 		<Type />
+	</div>
+	<!-- svelte-ignore a11y-no-static-element-interactions -->
+	<div
+		id="container"
+		draggable="true"
+		{ondragstart}
+		class="flex h-10 w-10 items-center justify-center rounded-md bg-muted"
+	>
+		<BoxSelect />
 	</div>
 </div>
