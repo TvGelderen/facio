@@ -16,7 +16,7 @@ importers:
         version: 5.2.2(@sveltejs/kit@2.5.26(@sveltejs/vite-plugin-svelte@4.0.0-next.7(svelte@5.0.0-next.244)(vite@5.4.4(@types/node@22.5.4)))(svelte@5.0.0-next.244)(vite@5.4.4(@types/node@22.5.4)))
       '@uploadthing/svelte':
         specifier: ^7.0.1
-        version: 7.0.1(svelte@5.0.0-next.244)(uploadthing@7.0.1(tailwindcss@3.4.11))
+        version: 7.0.1(svelte@5.0.0-next.244)(uploadthing@7.0.2(tailwindcss@3.4.11))
       arctic:
         specifier: ^1.9.2
         version: 1.9.2
@@ -59,6 +59,9 @@ importers:
       svelte-sonner:
         specifier: ^0.3.28
         version: 0.3.28(svelte@5.0.0-next.244)
+      svelte@latest:
+        specifier: link:uploadthing/svelte@latest
+        version: link:uploadthing/svelte@latest
       tailwind-merge:
         specifier: ^2.5.2
         version: 2.5.2
@@ -66,8 +69,8 @@ importers:
         specifier: ^0.2.1
         version: 0.2.1(tailwindcss@3.4.11)
       uploadthing:
-        specifier: ^7.0.1
-        version: 7.0.1(tailwindcss@3.4.11)
+        specifier: ^7.0.2
+        version: 7.0.2(tailwindcss@3.4.11)
       uuid:
         specifier: ^10.0.0
         version: 10.0.0
@@ -1307,6 +1310,9 @@ packages:
 
   '@uploadthing/shared@7.0.1':
     resolution: {integrity: sha512-NBRQpDu+2fdxk1uGXhHdKRnEjw9be5yKsTFqe4Xz39lUOLEswgTs+GgrlyBab3GpKqiBoqBYHiqPKXeaK6o/+g==}
+
+  '@uploadthing/shared@7.0.2':
+    resolution: {integrity: sha512-yhE7lA42m6g7Qw245Ey/8uK5J4d8FJhOg90VVt0PG1iJYvBZHbboSq1ndsGZ1X8jFaskBVORzWc66gEw43FEsQ==}
 
   '@uploadthing/svelte@7.0.1':
     resolution: {integrity: sha512-/d8jBSNwsfZ7slarRbtDA35hA/f85HQVLdqta/Jzb4XwxEk/kaVj6czsLy5UZE4wbqcMSkXM43UAcwyFRINhzw==}
@@ -2633,8 +2639,8 @@ packages:
     peerDependencies:
       browserslist: '>= 4.21.0'
 
-  uploadthing@7.0.1:
-    resolution: {integrity: sha512-6/HVdGpBLNQttayhVgGMcn8RNe2YLHr99DDr1/QWV13678mVACewLRB5mVP24UXrT0UNKKjWU5ojqlseeHI96Q==}
+  uploadthing@7.0.2:
+    resolution: {integrity: sha512-B5/r0nmOfWjo+cGvZLyDQ8jypJYWoW/VsmoL+VqkiGMg5yIkKzMGJ5InrDOJS+3WQBbW8KdhVrRyA+mGSZEGUw==}
     engines: {node: '>=18.13.0'}
     peerDependencies:
       express: '*'
@@ -3690,12 +3696,18 @@ snapshots:
       effect: 3.7.2
       sqids: 0.3.0
 
-  '@uploadthing/svelte@7.0.1(svelte@5.0.0-next.244)(uploadthing@7.0.1(tailwindcss@3.4.11))':
+  '@uploadthing/shared@7.0.2':
+    dependencies:
+      '@uploadthing/mime-types': 0.3.0
+      effect: 3.7.2
+      sqids: 0.3.0
+
+  '@uploadthing/svelte@7.0.1(svelte@5.0.0-next.244)(uploadthing@7.0.2(tailwindcss@3.4.11))':
     dependencies:
       '@uploadthing/dropzone': 0.4.1(svelte@5.0.0-next.244)
       '@uploadthing/shared': 7.0.1
       svelte: 5.0.0-next.244
-      uploadthing: 7.0.1(tailwindcss@3.4.11)
+      uploadthing: 7.0.2(tailwindcss@3.4.11)
     transitivePeerDependencies:
       - react
       - solid-js
@@ -4976,12 +4988,12 @@ snapshots:
       escalade: 3.2.0
       picocolors: 1.1.0
 
-  uploadthing@7.0.1(tailwindcss@3.4.11):
+  uploadthing@7.0.2(tailwindcss@3.4.11):
     dependencies:
       '@effect/platform': 0.63.2(@effect/schema@0.72.2(effect@3.7.2))(effect@3.7.2)
       '@effect/schema': 0.72.2(effect@3.7.2)
       '@uploadthing/mime-types': 0.3.0
-      '@uploadthing/shared': 7.0.1
+      '@uploadthing/shared': 7.0.2
       effect: 3.7.2
       effect-log: 0.32.0(effect@3.7.2)
     optionalDependencies:

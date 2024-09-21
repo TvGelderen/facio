@@ -33,11 +33,16 @@
 		}
 	}
 
+	function ondragstart(event: DragEvent) {
+		if (ref !== null) {
+			editor.handleDragStart(event, element, ref);
+		}
+	}
+
 	const select = (event: Event) =>
 		handleSelectElement(event, editor.handleAction, element);
 
 	$effect(() => {
-		console.log(element.styles);
 		if (ref) {
 			Object.assign(ref.style, element.styles);
 		}
@@ -58,6 +63,8 @@
 	role="button"
 	tabindex="0"
 	bind:this={ref}
+	draggable="true"
+	{ondragstart}
 >
 	{#if !editor.live && editor.selectedElement?.id === element.id}
 		<div
@@ -74,7 +81,13 @@
 		</Button>
 	{/if}
 
-	<span contenteditable={!editor.live} {onblur} {onkeypress} role="form">
+	<span
+		contenteditable={!editor.live}
+		{onblur}
+		{onkeypress}
+		role="form"
+		class="w-full focus-visible:outline-none"
+	>
 		{#if !Array.isArray(element.content) && element.content.innerText}
 			{element.content.innerText}
 		{/if}

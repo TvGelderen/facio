@@ -2,7 +2,6 @@
 	import { Type } from "lucide-svelte";
 
 	function ondragstart(event: DragEvent) {
-		console.log(event);
 		if (
 			!(event.target instanceof HTMLElement) ||
 			event.dataTransfer === null

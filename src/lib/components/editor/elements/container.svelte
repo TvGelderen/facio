@@ -27,6 +27,11 @@
 		handleSelectElement(event, editor.handleAction, element);
 
 	function ondrop(event: DragEvent) {
+		if (editor.dragging) {
+			editor.handleDrop(event, element);
+			return;
+		}
+
 		event.stopPropagation();
 
 		if (event.dataTransfer === null) {
@@ -72,12 +77,13 @@
 		event.dataTransfer.setData("component-type", element.type);
 	}
 
-	function ondragover(event: Event) {
-		event.preventDefault();
+	function ondragover(event: DragEvent) {
+		if (ref !== null) {
+			editor.handleDragOver(event, element, ref);
+		}
 	}
 
 	$effect(() => {
-		console.log("style change");
 		if (ref) {
 			Object.assign(ref.style, element.styles);
 		}

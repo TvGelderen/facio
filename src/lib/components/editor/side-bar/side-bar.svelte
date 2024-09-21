@@ -1,9 +1,9 @@
 <script lang="ts">
 	import * as Tabs from "$lib/components/ui/tabs/index.js";
-	import { Component, Database, Layers, Settings } from "lucide-svelte";
-	import SettingsTab from "./settings-tab.svelte";
+	import { Component, Database, Layers, Palette } from "lucide-svelte";
 	import ComponentsTab from "./components-tab.svelte";
 	import LayersTab from "./layers-tab.svelte";
+	import StylesTab from "./styles-tab.svelte";
 
 	const { hidden }: { hidden: boolean } = $props();
 </script>
@@ -14,7 +14,7 @@
 	>
 		<div class="w-full">
 			<Tabs.Content value="settings" class="px-2">
-				<SettingsTab />
+				<StylesTab />
 			</Tabs.Content>
 			<Tabs.Content value="components" class="px-2">
 				<ComponentsTab />
@@ -31,7 +31,7 @@
 					value="settings"
 					class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 				>
-					<Settings />
+					<Palette />
 				</Tabs.Trigger>
 				<Tabs.Trigger
 					value="components"

@@ -9,6 +9,7 @@
 	import TextAlignInput from "./inputs/text-align-input.svelte";
 	import FontStyleInput from "./inputs/font-style-input.svelte";
 	import PaddingInput from "./inputs/padding-input.svelte";
+	import InputWithUnit from "./inputs/input-with-unit.svelte";
 
 	const editor = getEditorState();
 
@@ -47,7 +48,7 @@
 	}
 </script>
 
-<h2 class="text-lg lg:text-xl">Settings</h2>
+<h2 class="text-lg lg:text-xl">Styles</h2>
 
 <Accordion.Root
 	multiple
@@ -92,22 +93,14 @@
 				/>
 				<TextAlignInput {handleCustomChange} />
 				<FontStyleInput {handleCustomChange} />
-				<ValueInput
+				<InputWithUnit
 					label="Font Size"
 					id="font-size"
 					value={editor.selectedElement?.styles.fontSize}
 					type="number"
 					placeholder="12"
 					unit="px"
-					handleChange={(event: Event) => {
-						if (!(event.target instanceof HTMLInputElement)) {
-							return;
-						}
-						handleCustomChange(
-							"font-size",
-							`${event.target.value}px`,
-						);
-					}}
+					{handleCustomChange}
 				/>
 			</div>
 		</Accordion.Content>

@@ -24,7 +24,7 @@ export function newTextElement(parentId: string) {
         type: ElementType.Text,
         name: "Text",
         styles: {
-            color: "black",
+            color: "#101010",
         },
         content: {
             innerText: "Text"
@@ -39,7 +39,7 @@ export function newLinkElement(parentId: string) {
         type: ElementType.Link,
         name: "Link",
         styles: {
-            color: "black",
+            color: "#101010",
         },
         content: {
             innerText: "Link",
