@@ -3,77 +3,56 @@
 		AlignVerticalJustifyCenter,
 		AlignVerticalJustifyEnd,
 		AlignVerticalJustifyStart,
-		AlignVerticalSpaceAround,
-		AlignVerticalSpaceBetween,
 	} from "lucide-svelte";
-	import * as Tabs from "$lib/components/ui/tabs/index";
+	import * as ToggleGroup from "$lib/components/ui/toggle-group/index.js";
 	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 
 	const {
+		value,
 		handleCustomChange,
 	}: {
+		value: string | undefined;
 		handleCustomChange: (style: string, value: string | undefined) => void;
 	} = $props();
 </script>
 
-<Tabs.Root
-	value="start"
+<ToggleGroup.Root
+	type="single"
+	value={value ?? "flex-start"}
+	onValueChange={(value) => handleCustomChange("alignItems", value)}
 	class="flex w-full justify-between rounded-md border-2 border-muted p-1"
-	onValueChange={(value) => handleCustomChange("align-content", value)}
 >
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
-				value="start"
+			<ToggleGroup.Item
+				value="flex-start"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignVerticalJustifyStart />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
 		<Tooltip.Content>Vertical align top</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="center"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignVerticalJustifyCenter />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
 		<Tooltip.Content>Vertical align center</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
-				value="space-between"
-				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
-			>
-				<AlignVerticalSpaceBetween />
-			</Tabs.Trigger>
-		</Tooltip.Trigger>
-		<Tooltip.Content>Vertical space between</Tooltip.Content>
-	</Tooltip.Root>
-	<Tooltip.Root>
-		<Tooltip.Trigger>
-			<Tabs.Trigger
-				value="space-around"
-				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
-			>
-				<AlignVerticalSpaceAround />
-			</Tabs.Trigger>
-		</Tooltip.Trigger>
-		<Tooltip.Content>Vertical space around</Tooltip.Content>
-	</Tooltip.Root>
-	<Tooltip.Root>
-		<Tooltip.Trigger>
-			<Tabs.Trigger
-				value="end"
+			<ToggleGroup.Item
+				value="flex-end"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignVerticalJustifyEnd />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
 		<Tooltip.Content>Vertical align bottom</Tooltip.Content>
 	</Tooltip.Root>
-</Tabs.Root>
+</ToggleGroup.Root>

@@ -6,74 +6,77 @@
 		AlignHorizontalSpaceAround,
 		AlignHorizontalSpaceBetween,
 	} from "lucide-svelte";
-	import * as Tabs from "$lib/components/ui/tabs/index";
+	import * as ToggleGroup from "$lib/components/ui/toggle-group/index.js";
 	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 
-	const {
+	let {
+		value,
 		handleCustomChange,
 	}: {
+		value: string | undefined;
 		handleCustomChange: (style: string, value: string | undefined) => void;
 	} = $props();
 </script>
 
-<Tabs.Root
-	value="flex-start"
+<ToggleGroup.Root
+	type="single"
+	value={value ?? "flex-start"}
+	onValueChange={(value) => handleCustomChange("justifyContent", value)}
 	class="flex w-full justify-between rounded-md border-2 border-muted p-1"
-	onValueChange={(value) => handleCustomChange("justify-content", value)}
 >
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="flex-start"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignHorizontalJustifyStart />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
 		<Tooltip.Content>Horizontal align left</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="center"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignHorizontalJustifyCenter />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
-		<Tooltip.Content>Horizontal align center</Tooltip.Content>
+		<Tooltip.Content>Horizontal align left</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="space-between"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignHorizontalSpaceBetween />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
-		<Tooltip.Content>Horizontal space between</Tooltip.Content>
+		<Tooltip.Content>Horizontal align left</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="space-around"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignHorizontalSpaceAround />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
-		<Tooltip.Content>Horizontal space around</Tooltip.Content>
+		<Tooltip.Content>Horizontal align left</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="flex-end"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignHorizontalJustifyEnd />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
-		<Tooltip.Content>Horizontal align right</Tooltip.Content>
+		<Tooltip.Content>Horizontal align left</Tooltip.Content>
 	</Tooltip.Root>
-</Tabs.Root>
+</ToggleGroup.Root>

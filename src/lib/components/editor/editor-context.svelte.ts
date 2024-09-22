@@ -140,9 +140,6 @@ export function createEditor() {
                 if (child.nextElementSibling === draggedElementRef) {
                     continue;
                 }
-                console.log(draggedElementRef);
-                console.log(dropTargetRef);
-                console.log(child.nextElementSibling);
                 if (isBetween(rect, child.nextElementSibling.getBoundingClientRect(), event.clientX, event.clientY)) {
                     dropTargetRef.insertBefore(draggedElementRef, child.nextElementSibling);
                     return;
@@ -168,9 +165,6 @@ export function createEditor() {
         if (draggedElement === null || draggedElementRef === null || dropTarget === null || dropTargetRef === null) {
             return;
         }
-
-        console.log(dropTargetRef);
-        console.log(draggedElementRef);
 
         draggedElement.parentId = dropTarget.id;
 

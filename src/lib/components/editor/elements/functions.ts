@@ -30,6 +30,7 @@ export function newTextElement(parentId: string) {
         name: "Text",
         styles: {
             color: "#101010",
+            display: "inline",
         },
         content: {
             innerText: "Text"
@@ -45,6 +46,7 @@ export function newLinkElement(parentId: string) {
         name: "Link",
         styles: {
             color: "#101010",
+            display: "inline",
         },
         content: {
             innerText: "Link",
@@ -64,6 +66,9 @@ export function newContainerElement(parentId: string) {
             paddingTop: "4px",
             paddingRight: "4px",
             paddingBottom: "4px",
+            display: "flex",
+            justifyContent: "center",
+            alignItems: "center"
         },
         content: []
     };

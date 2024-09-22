@@ -1,5 +1,7 @@
 <script lang="ts">
+	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 	import * as Accordion from "$lib/components/ui/accordion/index.js";
+	import * as Select from "$lib/components/ui/select/index.js";
 	import Input from "$lib/components/ui/input/input.svelte";
 	import { getEditorState } from "../editor-context.svelte";
 	import { EditorActionType, ElementType } from "../types";
@@ -10,8 +12,31 @@
 	import FontStyleInput from "./inputs/font-style-input.svelte";
 	import PaddingInput from "./inputs/padding-input.svelte";
 	import InputWithUnit from "./inputs/input-with-unit.svelte";
+	import Label from "$lib/components/ui/label/label.svelte";
+	import { BetweenHorizonalStart, BetweenVerticalStart } from "lucide-svelte";
 
 	const editor = getEditorState();
+
+	const displayOptions = [
+		{ value: "block", label: "block" },
+		{ value: "flex", label: "flex" },
+		{ value: "grid", label: "grid" },
+		{ value: "inline", label: "inline" },
+		{ value: "none", label: "none" },
+	];
+
+	const flexDirectionOptions = [
+		{ value: "row", label: "row" },
+		{ value: "column", label: "column" },
+		{ value: "row-reverse", label: "row-reverse" },
+		{ value: "column-reverse", label: "column-reverse" },
+	];
+
+	const flexFlowOptions = [
+		{ value: "nowrap", label: "nowrap" },
+		{ value: "wrap", label: "wrap" },
+		{ value: "wrap-reverse", label: "wrap-reverse" },
+	];
 
 	function handleLinkChange() {
 		console.log("handleLinkChange");
@@ -91,7 +116,10 @@
 					value={editor.selectedElement?.styles.color}
 					{handleChange}
 				/>
-				<TextAlignInput {handleCustomChange} />
+				<TextAlignInput
+					value={editor.selectedElement?.styles.textAlign}
+					{handleCustomChange}
+				/>
 				<FontStyleInput {handleCustomChange} />
 				<InputWithUnit
 					label="Font Size"
@@ -151,8 +179,152 @@
 		<Accordion.Trigger class="!no-underline">Layout</Accordion.Trigger>
 		<Accordion.Content class="p-1">
 			<div class="flex flex-col gap-4">
-				<HorizontalAlignInput {handleCustomChange} />
-				<VerticalAlignInput {handleCustomChange} />
+				<div class="grid grid-cols-3 items-center">
+					<Label>Display</Label>
+					<Select.Root
+						items={displayOptions}
+						selected={displayOptions.find(
+							(option) =>
+								option.value ===
+								editor.selectedElement?.styles.display?.toString(),
+						)}
+						onSelectedChange={(value) =>
+							handleCustomChange("display", value?.value)}
+					>
+						<Select.Trigger
+							class="col-span-2 h-8 px-2 py-0 focus-visible:ring-offset-0 "
+						>
+							<Select.Value placeholder="Select a value" />
+						</Select.Trigger>
+						<Select.Content>
+							{#each displayOptions as option}
+								<Select.Item
+									value={option.value}
+									label={option.label}
+								>
+									{option.label}
+								</Select.Item>
+							{/each}
+						</Select.Content>
+						<Select.Input name="favoriteFruit" />
+					</Select.Root>
+				</div>
+				{#if editor.selectedElement?.styles.display === "flex"}
+					<div class="grid grid-cols-3 items-center">
+						<Label>Flex direction</Label>
+						<Select.Root
+							items={flexDirectionOptions}
+							selected={flexDirectionOptions.find(
+								(option) =>
+									option.value ===
+									editor.selectedElement?.styles.flexDirection?.toString(),
+							)}
+							onSelectedChange={(value) =>
+								handleCustomChange(
+									"flexDirection",
+									value?.value,
+								)}
+						>
+							<Select.Trigger
+								class="col-span-2 h-8 px-2 py-0 focus-visible:ring-offset-0 "
+							>
+								<Select.Value placeholder="Select a value" />
+							</Select.Trigger>
+							<Select.Content>
+								{#each flexDirectionOptions as option}
+									<Select.Item
+										value={option.value}
+										label={option.label}
+									>
+										{option.label}
+									</Select.Item>
+								{/each}
+							</Select.Content>
+						</Select.Root>
+					</div>
+					<div class="grid grid-cols-3 items-center">
+						<Label>Flex flow</Label>
+						<Select.Root
+							items={flexFlowOptions}
+							selected={flexFlowOptions.find(
+								(option) =>
+									option.value ===
+									editor.selectedElement?.styles.flexFlow?.toString(),
+							)}
+							onSelectedChange={(value) =>
+								handleCustomChange("flexFlow", value?.value)}
+						>
+							<Select.Trigger
+								class="col-span-2 h-8 px-2 py-0 focus-visible:ring-offset-0 "
+							>
+								<Select.Value placeholder="Select a value" />
+							</Select.Trigger>
+							<Select.Content>
+								{#each flexDirectionOptions as option}
+									<Select.Item
+										value={option.value}
+										label={option.label}
+									>
+										{option.label}
+									</Select.Item>
+								{/each}
+							</Select.Content>
+							<Select.Input name="favoriteFruit" />
+						</Select.Root>
+					</div>
+				{/if}
+
+				{#if editor.selectedElement?.styles.display === "flex" || editor.selectedElement?.styles.display === "grid"}
+					<div class="grid grid-cols-2 gap-4">
+						<Tooltip.Root>
+							<Tooltip.Trigger class="flex h-full items-center">
+								<Label
+									for="rowGap"
+									class="flex h-full items-center rounded-l-md border !border-r-0 border-muted px-2"
+								>
+									<BetweenHorizonalStart class="h-5 w-5" />
+								</Label>
+								<InputWithUnit
+									id="rowGap"
+									value={editor.selectedElement.styles.rowGap}
+									type="number"
+									unit="px"
+									placeholder="0"
+									{handleCustomChange}
+								/>
+							</Tooltip.Trigger>
+							<Tooltip.Content>Row Gap</Tooltip.Content>
+						</Tooltip.Root>
+						<Tooltip.Root>
+							<Tooltip.Trigger class="flex h-full items-center">
+								<Label
+									for="columnGap"
+									class="flex h-full items-center rounded-l-md border !border-r-0 border-muted px-2"
+								>
+									<BetweenVerticalStart class="h-5 w-5" />
+								</Label>
+								<InputWithUnit
+									id="columnGap"
+									value={editor.selectedElement.styles
+										.columnGap}
+									type="number"
+									unit="px"
+									placeholder="0"
+									{handleCustomChange}
+								/>
+							</Tooltip.Trigger>
+							<Tooltip.Content>Column Gap</Tooltip.Content>
+						</Tooltip.Root>
+					</div>
+					<HorizontalAlignInput
+						value={editor.selectedElement?.styles.justifyContent}
+						{handleCustomChange}
+					/>
+					<VerticalAlignInput
+						value={editor.selectedElement?.styles.alignItems}
+						{handleCustomChange}
+					/>
+				{/if}
 			</div>
 		</Accordion.Content>
 	</Accordion.Item>

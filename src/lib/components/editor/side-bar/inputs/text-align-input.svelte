@@ -5,64 +5,66 @@
 		AlignLeft,
 		AlignRight,
 	} from "lucide-svelte";
-	import * as Tabs from "$lib/components/ui/tabs/index";
+	import * as ToggleGroup from "$lib/components/ui/toggle-group/index.js";
 	import * as Tooltip from "$lib/components/ui/tooltip/index.js";
 
 	const {
+		value,
 		handleCustomChange,
 	}: {
+		value: string | undefined;
 		handleCustomChange: (style: string, value: string | undefined) => void;
 	} = $props();
 </script>
 
-<Tabs.Root
-	id="text-align"
-	value="left"
-	class="flex w-full justify-between rounded-md border-2 border-muted p-1"
+<ToggleGroup.Root
+	type="single"
+	value={value ?? "left"}
 	onValueChange={(value) => handleCustomChange("text-align", value)}
+	class="flex w-full justify-between rounded-md border-2 border-muted p-1"
 >
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="left"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignLeft />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
 		<Tooltip.Content>Align left</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="center"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignCenter />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
 		<Tooltip.Content>Align center</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="right"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignRight />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
 		<Tooltip.Content>Align right</Tooltip.Content>
 	</Tooltip.Root>
 	<Tooltip.Root>
 		<Tooltip.Trigger>
-			<Tabs.Trigger
+			<ToggleGroup.Item
 				value="justify"
 				class="h-10 w-10 p-0 data-[state=active]:bg-muted"
 			>
 				<AlignJustify />
-			</Tabs.Trigger>
+			</ToggleGroup.Item>
 		</Tooltip.Trigger>
 		<Tooltip.Content>Justify</Tooltip.Content>
 	</Tooltip.Root>
-</Tabs.Root>
+</ToggleGroup.Root>
