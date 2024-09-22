@@ -10,7 +10,9 @@ export function handleDeleteElement(handleAction: (action: EditorAction) => void
 }
 
 export function handleSelectElement(event: Event, handleAction: (action: EditorAction) => void, element: EditorElement) {
+    event.preventDefault();
     event.stopPropagation();
+
     handleAction({
         type: EditorActionType.UpdateSelectedElement,
         element: element
@@ -19,7 +21,7 @@ export function handleSelectElement(event: Event, handleAction: (action: EditorA
 
 export function newTextElement(parentId: string) {
     return {
-        id: generateIdFromEntropySize(12),
+        id: id(),
         parentId: parentId,
         type: ElementType.Text,
         name: "Text",
@@ -34,7 +36,7 @@ export function newTextElement(parentId: string) {
 
 export function newLinkElement(parentId: string) {
     return {
-        id: generateIdFromEntropySize(12),
+        id: id(),
         parentId: parentId,
         type: ElementType.Link,
         name: "Link",
@@ -50,11 +52,18 @@ export function newLinkElement(parentId: string) {
 
 export function newContainerElement(parentId: string) {
     return {
-        id: generateIdFromEntropySize(12),
+        id: id(),
         parentId: parentId,
         type: ElementType.Container,
         name: "Container",
-        styles: {},
+        styles: {
+            paddingLeft: "4px",
+            paddingTop: "4px",
+            paddingRight: "4px",
+            paddingBottom: "4px",
+        },
         content: []
     };
 }
+
+const id = () => generateIdFromEntropySize(12);

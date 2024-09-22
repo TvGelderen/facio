@@ -37,6 +37,7 @@
 	}
 
 	function ondrop(event: DragEvent) {
+		console.log(editor.dragging);
 		if (editor.dragging) {
 			editor.handleDrop(event, element);
 			return;

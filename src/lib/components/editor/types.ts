@@ -24,7 +24,6 @@ export type EditorState = {
 
 export enum ElementType {
     Body = '__body',
-    Section = 'section',
     Container = 'container',
     Text = 'text',
     Link = 'link',

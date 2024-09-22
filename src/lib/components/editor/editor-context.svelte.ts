@@ -1,6 +1,6 @@
 import { getContext, setContext } from "svelte";
 import { Device, EditorActionType, ElementType, type EditorAction, type EditorElement, type EditorState } from "./types";
-import { addElement, deleteElement, insertElementBefore, updateElement } from "./editor";
+import { addElement, deleteElement, insertElementBefore, insertElementInto, updateElement } from "./editor";
 
 export function createEditor() {
     let elements = $state<EditorElement[]>([
@@ -46,6 +46,9 @@ export function createEditor() {
                 }
                 break;
             case EditorActionType.UpdateSelectedElement:
+                if (selectedElement === action.element) {
+                    return;
+                }
                 selectedElement = action.element;
                 break;
             case EditorActionType.ChangeDevice:
@@ -90,13 +93,12 @@ export function createEditor() {
     }
 
     function handleDragOver(event: DragEvent, element: EditorElement, reference: HTMLElement) {
-        if (draggedElementRef === null || draggedElementRef.contains(reference)) {
-            console.log("return");
+        event.preventDefault();
+        if (draggedElementRef === null || draggedElementRef.contains(reference) || !isValidDropTarget(element.type)) {
             return;
         }
 
         event.stopPropagation();
-        event.preventDefault();
 
         if (dropTarget !== element) {
             dropTarget = element;
@@ -108,41 +110,36 @@ export function createEditor() {
         }
 
         const children = dropTargetRef.querySelectorAll(":scope>*:not(.absolute)");
+        if (children.length === 0) {
+            dropTargetRef.appendChild(draggedElementRef);
+            return;
+        }
+
         for (const child of children) {
             if (child === draggedElementRef) {
                 continue;
             }
 
             const rect = child.getBoundingClientRect();
-            const middleX = rect.left + rect.width / 2;
-            const middleY = rect.top + rect.height / 2;
-
             if (child.previousElementSibling === null) {
-                console.log("child.previousElementSibling === null")
                 if (child.nextElementSibling !== null) {
-                    console.log("child.nextElementSibling !== null")
                     const nextRect = child.nextElementSibling.getBoundingClientRect();
                     const vertical = rect.bottom <= nextRect.top;
-                    if ((vertical && middleY > event.clientY) || (!vertical && middleX > event.clientX)) {
-                        console.log("above first")
+                    if (isAbove(rect, vertical, event.clientX, event.clientY)) {
                         dropTargetRef.insertBefore(draggedElementRef, child);
                         return;
                     }
                 } else {
-                    console.log("only one child")
                     dropTargetRef.appendChild(draggedElementRef);
                     return;
                 }
             }
 
             if (child.nextElementSibling !== null) {
-                console.log("child.nextElementSibling !== null")
                 if (child.nextElementSibling === draggedElementRef) {
-                    console.log("child.nextElementSibling === draggedElementRef")
                     continue;
                 }
                 if (isBetween(rect, child.nextElementSibling.getBoundingClientRect(), event.clientX, event.clientY)) {
-                    console.log("isBetween")
                     dropTargetRef.insertBefore(draggedElementRef, child.nextElementSibling);
                     return;
                 }
@@ -150,11 +147,9 @@ export function createEditor() {
             }
 
             if (child.previousElementSibling !== null) {
-                console.log("child.previousElementSibling !== null")
                 const prevRect = child.previousElementSibling.getBoundingClientRect();
                 const vertical = prevRect.bottom <= rect.top;
-                if ((vertical && middleY < event.clientY) || (!vertical && middleX < event.clientX)) {
-                    console.log("below last element")
+                if (isBelow(rect, vertical, event.clientX, event.clientY)) {
                     dropTargetRef.appendChild(draggedElementRef);
                     return;
                 }
@@ -162,32 +157,56 @@ export function createEditor() {
         }
     }
 
-    // Assumes that rect1 comes before rect2
-    function isBetween(rect1: DOMRect, rect2: DOMRect, x: number, y: number) {
-        const middleX1 = rect1.left + rect1.width / 2;
-        const middleX2 = rect2.left + rect2.width / 2;
-        const middleY1 = rect1.top + rect1.height / 2;
-        const middleY2 = rect2.top + rect2.height / 2;
-
-        // If the are oriented vertically
-        if (rect1.bottom <= rect2.top) {
-            return middleY1 < y && middleY2 > y;
-        }
-        return middleX1 < x && middleX2 > x;
-    }
-
     function handleDrop(event: DragEvent, element: EditorElement) {
+        event.preventDefault();
         event.stopPropagation();
+
+        console.log(element)
+        console.log(dropTargetRef)
 
         if (draggedElement === null) {
             return;
         }
 
-        insertElementBefore(deleteElement(elements, draggedElement), draggedElement, element);
+        if (!isValidDropTarget(element.type)) {
+            insertElementBefore(deleteElement(elements, draggedElement), draggedElement, element);
+        } else {
+            insertElementInto(deleteElement(elements, draggedElement), draggedElement, element);
+        }
 
         dropTarget = null;
         dropTargetRef = null;
         dragging = false;
+    }
+
+    function isAbove(rect: DOMRect, vertical: boolean, x: number, y: number) {
+        const X = rect.left + Math.min(rect.width / 2, 8);
+        const Y = rect.top + Math.min(rect.height / 2, 8);
+        return (vertical && Y > y) || (!vertical && X > x);
+    }
+
+    function isBelow(rect: DOMRect, vertical: boolean, x: number, y: number) {
+        const X = rect.right - Math.min(rect.width / 2, 8);
+        const Y = rect.bottom - Math.min(rect.height / 2, 8);
+        return (vertical && Y < y) || (!vertical && X < x);
+    }
+
+    // Assumes that rect1 comes before rect2
+    function isBetween(rect1: DOMRect, rect2: DOMRect, x: number, y: number) {
+        const X1 = rect1.right - Math.min(rect1.width / 2, 8);
+        const Y1 = rect1.bottom - Math.min(rect1.height / 2, 8);
+        const X2 = rect2.left + Math.min(rect2.width / 2, 8);
+        const Y2 = rect2.top + Math.min(rect2.height / 2, 8);
+
+        // If they are oriented vertically
+        if (rect1.bottom <= rect2.top) {
+            return Y1 < y && Y2 > y;
+        }
+        return X1 < x && X2 > x;
+    }
+
+    function isValidDropTarget(type: ElementType) {
+        return type === ElementType.Body || type === ElementType.Container;
     }
 
     const toggleView = () => {

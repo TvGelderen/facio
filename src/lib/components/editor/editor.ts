@@ -19,11 +19,18 @@ export function addElement(elements: EditorElement[], element: EditorElement, pa
 
 export function insertElementBefore(elements: EditorElement[], element: EditorElement, reference: EditorElement): EditorElement[] {
     return elements.map(item => {
+        if (item.id === reference.parentId && Array.isArray(item.content)) {
+            const referenceIndex = item.content.indexOf(reference);
+            item.content.splice(referenceIndex, 0, element);
+        }
+        return item;
+    });
+}
+
+export function insertElementInto(elements: EditorElement[], element: EditorElement, reference: EditorElement): EditorElement[] {
+    return elements.map(item => {
         if (item.id === reference.id && Array.isArray(item.content)) {
-            if (Array.isArray(item.content)) {
-                const referenceIndex = item.content.indexOf(reference);
-                item.content.splice(referenceIndex, 0, element);
-            }
+            item.content.push(element);
         }
         return item;
     });
