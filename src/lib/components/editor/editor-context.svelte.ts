@@ -1,6 +1,6 @@
-import { getContext, setContext } from "svelte";
-import { Device, EditorActionType, ElementType, type EditorAction, type EditorElement, type EditorState } from "./types";
+import { getContext, setContext, tick } from "svelte";
 import { addElement, deleteElement, insertElementBefore, insertElementInto, updateElement } from "./editor";
+import { Device, EditorActionType, ElementType, type EditorAction, type EditorElement, type EditorState } from "./types";
 
 export function createEditor() {
     let elements = $state<EditorElement[]>([
@@ -90,11 +90,12 @@ export function createEditor() {
         dragging = true;
         draggedElement = element;
         draggedElementRef = reference;
+        draggedElementRef.dataset.state = "dragged";
     }
 
     function handleDragOver(event: DragEvent, element: EditorElement, reference: HTMLElement) {
         event.preventDefault();
-        if (draggedElementRef === null || draggedElementRef.contains(reference) || !isValidDropTarget(element.type)) {
+        if (draggedElement === null || draggedElementRef === null || draggedElementRef.contains(reference) || !isValidDropTarget(element.type)) {
             return;
         }
 
@@ -139,6 +140,9 @@ export function createEditor() {
                 if (child.nextElementSibling === draggedElementRef) {
                     continue;
                 }
+                console.log(draggedElementRef);
+                console.log(dropTargetRef);
+                console.log(child.nextElementSibling);
                 if (isBetween(rect, child.nextElementSibling.getBoundingClientRect(), event.clientX, event.clientY)) {
                     dropTargetRef.insertBefore(draggedElementRef, child.nextElementSibling);
                     return;
@@ -157,21 +161,40 @@ export function createEditor() {
         }
     }
 
-    function handleDrop(event: DragEvent, element: EditorElement) {
+    async function handleDrop(event: DragEvent) {
         event.preventDefault();
         event.stopPropagation();
 
-        console.log(element)
-        console.log(dropTargetRef)
-
-        if (draggedElement === null) {
+        if (draggedElement === null || draggedElementRef === null || dropTarget === null || dropTargetRef === null) {
             return;
         }
 
-        if (!isValidDropTarget(element.type)) {
-            insertElementBefore(deleteElement(elements, draggedElement), draggedElement, element);
+        console.log(dropTargetRef);
+        console.log(draggedElementRef);
+
+        draggedElement.parentId = dropTarget.id;
+
+        if (draggedElementRef.nextElementSibling !== null && Array.isArray(dropTarget.content)) {
+            const sibling = dropTarget.content.find(el => el.id === draggedElementRef!.nextElementSibling!.id);
+            if (sibling !== undefined) {
+                elements = insertElementBefore(deleteElement(elements, draggedElement), draggedElement, sibling);
+            }
         } else {
-            insertElementInto(deleteElement(elements, draggedElement), draggedElement, element);
+            elements = insertElementInto(deleteElement(elements, draggedElement), draggedElement, dropTarget);
+        }
+
+        await tick();
+
+        let remove = false;
+        for (const child of dropTargetRef.children) {
+            if (child.id === draggedElement.id) {
+                console.log(child)
+                if (remove) {
+                    child.remove();
+                } else {
+                    remove = true;
+                }
+            }
         }
 
         dropTarget = null;

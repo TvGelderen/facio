@@ -37,9 +37,8 @@
 	}
 
 	function ondrop(event: DragEvent) {
-		console.log(editor.dragging);
 		if (editor.dragging) {
-			editor.handleDrop(event, element);
+			editor.handleDrop(event);
 			return;
 		}
 
@@ -84,6 +83,9 @@
 	const select = (event: Event) =>
 		handleSelectElement(event, editor.handleAction, element);
 
+	const handleDelete = (event: Event) =>
+		handleDeleteElement(event, editor.handleAction, element);
+
 	$effect(() => {
 		if (ref) {
 			Object.assign(ref.style, element.styles);
@@ -103,18 +105,16 @@
 			: ""
 	} ${body && "h-full"} ${!body && "h-fit"}`}
 	draggable={!body}
+	onclick={select}
 	{ondrop}
 	{ondragstart}
 	{ondragover}
-	onclick={select}
-	onkeypress={select}
-	role="button"
-	tabindex="0"
 	bind:this={ref}
+	role="none"
 >
 	{#if !editor.live && editor.selectedElement?.id === element.id}
 		<div
-			class="absolute left-[-2px] top-[-24px] bg-primary px-[4px] py-[2px] text-sm"
+			class="absolute left-[-2px] top-[-24px] bg-primary px-[4px] py-[2px] text-sm text-white"
 		>
 			{editor.selectedElement.name}
 		</div>
@@ -122,8 +122,7 @@
 			<Button
 				variant="destructive"
 				class="absolute right-[-2px] top-[-24px] h-6 w-6 rounded-none p-0"
-				onclick={() =>
-					handleDeleteElement(editor.handleAction, element)}
+				onclick={handleDelete}
 			>
 				<Trash class="h-4 w-4 text-white" />
 			</Button>

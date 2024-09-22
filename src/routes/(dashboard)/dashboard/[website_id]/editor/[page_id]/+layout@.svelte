@@ -60,6 +60,23 @@
 			toast.error("Something went wrong saving the current page");
 		}
 	}
+
+	function handleKey(event: KeyboardEvent) {
+		if (event.key === "s" && event.ctrlKey) {
+			event.preventDefault();
+			savePageLayout();
+		} else if (event.key === "z" && event.ctrlKey) {
+			editor.undo();
+		}
+	}
+
+	$effect(() => {
+		document.addEventListener("keydown", handleKey);
+
+		return () => {
+			document.removeEventListener("keydown", handleKey);
+		};
+	});
 </script>
 
 <svelte:head>

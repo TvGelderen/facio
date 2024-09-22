@@ -1,7 +1,10 @@
 import { generateIdFromEntropySize } from "lucia";
 import { EditorActionType, ElementType, type EditorAction, type EditorElement } from "../types";
 
-export function handleDeleteElement(handleAction: (action: EditorAction) => void, element: EditorElement) {
+export function handleDeleteElement(event: Event, handleAction: (action: EditorAction) => void, element: EditorElement) {
+    event.preventDefault();
+    event.stopPropagation();
+
     handleAction({
         type: EditorActionType.DeleteElement,
         parentId: element.parentId,
