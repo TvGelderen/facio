@@ -57,6 +57,8 @@
 	function handleCustomChange(style: string, value: string | undefined) {
 		console.log(`handleCustomChange('${style}', '${value}')`);
 
+		console.log(editor.selectedElement);
+
 		if (editor.selectedElement === null || !value) {
 			return;
 		}
@@ -274,6 +276,28 @@
 					</div>
 				{/if}
 
+				{#if editor.selectedElement?.styles.display === "grid"}
+					<ValueInput
+						label="Grid template columns"
+						id="gridTemplateColumns"
+						value={editor.selectedElement?.styles
+							.gridTemplateColumns}
+						type="string"
+						placeholder="1fr"
+						className="grid-cols-1"
+						{handleChange}
+					/>
+					<ValueInput
+						label="Grid template rows"
+						id="gridTemplateRows"
+						value={editor.selectedElement?.styles.gridTemplateRows}
+						type="string"
+						placeholder="1fr"
+						className="grid-cols-1"
+						{handleChange}
+					/>
+				{/if}
+
 				{#if editor.selectedElement?.styles.display === "flex" || editor.selectedElement?.styles.display === "grid"}
 					<div class="grid grid-cols-2 gap-4">
 						<Tooltip.Root>
@@ -282,7 +306,34 @@
 									for="rowGap"
 									class="flex h-full items-center rounded-l-md border !border-r-0 border-muted px-2"
 								>
-									<BetweenHorizonalStart class="h-5 w-5" />
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="20"
+										height="20"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										class="lucide lucide-between-horizontal-start"
+									>
+										<rect
+											width="13"
+											height="7"
+											x="8"
+											y="3"
+											rx="1"
+										/>
+										<path d="m2 9 3 3-3 3" />
+										<rect
+											width="13"
+											height="7"
+											x="8"
+											y="14"
+											rx="1"
+										/>
+									</svg>
 								</Label>
 								<InputWithUnit
 									id="rowGap"
@@ -301,7 +352,34 @@
 									for="columnGap"
 									class="flex h-full items-center rounded-l-md border !border-r-0 border-muted px-2"
 								>
-									<BetweenVerticalStart class="h-5 w-5" />
+									<svg
+										xmlns="http://www.w3.org/2000/svg"
+										width="20"
+										height="20"
+										viewBox="0 0 24 24"
+										fill="none"
+										stroke="currentColor"
+										stroke-width="2"
+										stroke-linecap="round"
+										stroke-linejoin="round"
+										class="lucide lucide-between-vertical-start"
+									>
+										<rect
+											width="7"
+											height="13"
+											x="3"
+											y="8"
+											rx="1"
+										/>
+										<path d="m15 2-3 3-3-3" />
+										<rect
+											width="7"
+											height="13"
+											x="14"
+											y="8"
+											rx="1"
+										/>
+									</svg>
 								</Label>
 								<InputWithUnit
 									id="columnGap"

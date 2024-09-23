@@ -99,9 +99,9 @@
 		!editor.live
 			? editor.selectedElement?.id === element.id
 				? body
-					? "border-2 border-red-500/50"
-					: "border-2 border-primary"
-				: "border-2 border-dashed border-muted-foreground"
+					? "border border-red-500/50"
+					: "border border-primary"
+				: "border border-dashed border-muted-foreground"
 			: ""
 	} ${body && "h-full"} ${!body && "h-fit"}`}
 	draggable={!body}
@@ -112,21 +112,19 @@
 	bind:this={ref}
 	role="none"
 >
-	{#if !editor.live && editor.selectedElement?.id === element.id}
+	{#if !editor.live && editor.selectedElement?.id === element.id && !body}
 		<div
 			class="absolute left-[-2px] top-[-24px] bg-primary px-[4px] py-[2px] text-sm text-white"
 		>
 			{editor.selectedElement.name}
 		</div>
-		{#if !body}
-			<Button
-				variant="destructive"
-				class="absolute right-[-2px] top-[-24px] h-6 w-6 rounded-none p-0"
-				onclick={handleDelete}
-			>
-				<Trash class="h-4 w-4 text-white" />
-			</Button>
-		{/if}
+		<Button
+			variant="destructive"
+			class="absolute right-[-2px] top-[-24px] h-6 w-6 rounded-none p-0"
+			onclick={handleDelete}
+		>
+			<Trash class="h-4 w-4 text-white" />
+		</Button>
 	{/if}
 
 	{#if element.type === ElementType.Body}
