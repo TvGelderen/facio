@@ -29,8 +29,9 @@ export function newTextElement(parentId: string) {
         type: ElementType.Text,
         name: "Text",
         styles: {
+            background: "transparent",
             color: "#101010",
-            display: "inline",
+            display: "block",
         },
         content: {
             innerText: "Text"
@@ -45,8 +46,9 @@ export function newLinkElement(parentId: string) {
         type: ElementType.Link,
         name: "Link",
         styles: {
+            background: "transparent",
             color: "#101010",
-            display: "inline",
+            display: "block",
         },
         content: {
             innerText: "Link",
@@ -62,6 +64,7 @@ export function newContainerElement(parentId: string) {
         type: ElementType.Container,
         name: "Container",
         styles: {
+            background: "transparent",
             paddingLeft: "4px",
             paddingTop: "4px",
             paddingRight: "4px",

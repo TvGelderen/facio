@@ -4,8 +4,10 @@ export function addElement(elements: EditorElement[], element: EditorElement, pa
     return elements.map((item) => {
         if (Array.isArray(item.content)) {
             if (item.id === parentId) {
-                item.content.push(element);
-                return item;
+                return {
+                    ...item,
+                    content: [...item.content, element]
+                }
             }
             item.content = addElement(item.content, element, parentId);
         }
@@ -13,28 +15,25 @@ export function addElement(elements: EditorElement[], element: EditorElement, pa
     });
 }
 
-export function insertElementBefore(elements: EditorElement[], element: EditorElement, reference: EditorElement): EditorElement[] {
-    return elements.map(item => {
-        if (Array.isArray(item.content)) {
-            if (item.id === reference.parentId) {
-                const referenceIndex = item.content.indexOf(reference);
-                item.content.splice(referenceIndex, 0, element);
-                return item;
-            }
-            item.content = insertElementBefore(item.content, element, reference);
-        }
-        return item;
-    });
-}
+export function insertElement(elements: EditorElement[], element: EditorElement, parentId: string, index?: number): EditorElement[] {
+    element.parentId = parentId;
 
-export function insertElementInto(elements: EditorElement[], element: EditorElement, reference: EditorElement): EditorElement[] {
     return elements.map(item => {
         if (Array.isArray(item.content)) {
-            if (item.id === reference.id && Array.isArray(item.content)) {
-                item.content.push(element);
-                return item;
+            if (item.id === parentId) {
+                if (index) {
+                    console.log(item.content.toSpliced(index, 0, element));
+                    return {
+                        ...item,
+                        content: item.content.toSpliced(index, 0, element)
+                    }
+                }
+                return {
+                    ...item,
+                    content: [...item.content, element]
+                }
             }
-            item.content = insertElementInto(item.content, element, reference);
+            item.content = insertElement(item.content, element, parentId, index);
         }
         return item;
     });
@@ -62,4 +61,20 @@ export function deleteElement(elements: EditorElement[], element: EditorElement)
         }
         return true;
     });
+}
+
+export function getElementById(elements: EditorElement[], id: string): EditorElement | undefined {
+    const element = elements.find(el => el.id === id);
+    if (element) {
+        return element;
+    }
+
+    for (const el of elements) {
+        if (Array.isArray(el.content)) {
+            const element = getElementById(el.content, id);
+            if (element) {
+                return element;
+            }
+        }
+    }
 }

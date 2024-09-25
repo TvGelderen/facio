@@ -11,6 +11,7 @@
 		className,
 		unit,
 		handleChange,
+		handleCustomChange,
 	}: {
 		label: string;
 		id: string;
@@ -19,8 +20,19 @@
 		placeholder?: string;
 		className?: string;
 		unit?: string;
-		handleChange: (event: Event) => void;
+		handleChange?: (event: Event) => void;
+		handleCustomChange?: (value: string) => void;
 	} = $props();
+
+	function onchange(event: Event) {
+		if (handleChange) {
+			return handleChange(event);
+		}
+
+		if (handleCustomChange && event.target instanceof HTMLInputElement) {
+			return handleCustomChange(event.target.value);
+		}
+	}
 </script>
 
 <div class={className ? className : "grid grid-cols-3 items-center"}>
@@ -32,7 +44,7 @@
 			{placeholder}
 			type={type ?? "text"}
 			class={`h-8 px-2 py-0 focus-visible:ring-offset-0 ${unit && "!rounded-r-none !border-r-0"}`}
-			onchange={handleChange}
+			{onchange}
 		/>
 		{#if unit}
 			<div

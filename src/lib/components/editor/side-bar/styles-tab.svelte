@@ -13,7 +13,6 @@
 	import PaddingInput from "./inputs/padding-input.svelte";
 	import InputWithUnit from "./inputs/input-with-unit.svelte";
 	import Label from "$lib/components/ui/label/label.svelte";
-	import { BetweenHorizonalStart, BetweenVerticalStart } from "lucide-svelte";
 
 	const editor = getEditorState();
 
@@ -143,7 +142,7 @@
 					label="Width"
 					id="width"
 					value={editor.selectedElement?.styles.width}
-					type="string"
+					type="text"
 					placeholder="auto"
 					className="flex flex-col"
 					{handleChange}
@@ -151,8 +150,8 @@
 				<ValueInput
 					label="Height"
 					id="height"
-					value={editor.selectedElement?.styles.width}
-					type="string"
+					value={editor.selectedElement?.styles.height}
+					type="text"
 					placeholder="auto"
 					className="flex flex-col"
 					{handleChange}
@@ -171,7 +170,7 @@
 				label="Background"
 				id="background"
 				value={editor.selectedElement?.styles.background}
-				type="string"
+				type="text"
 				placeholder="transparent"
 				{handleChange}
 			/>
@@ -277,25 +276,38 @@
 				{/if}
 
 				{#if editor.selectedElement?.styles.display === "grid"}
-					<ValueInput
-						label="Grid template columns"
-						id="gridTemplateColumns"
-						value={editor.selectedElement?.styles
-							.gridTemplateColumns}
-						type="string"
-						placeholder="1fr"
-						className="grid-cols-1"
-						{handleChange}
-					/>
-					<ValueInput
-						label="Grid template rows"
-						id="gridTemplateRows"
-						value={editor.selectedElement?.styles.gridTemplateRows}
-						type="string"
-						placeholder="1fr"
-						className="grid-cols-1"
-						{handleChange}
-					/>
+					<div class="grid grid-cols-2 gap-4">
+						<ValueInput
+							label="Number of columns"
+							id="gridTemplateColumns"
+							value={editor.selectedElement?.styles.gridTemplateColumns
+								?.toString()
+								.replace("repeat(", "")
+								.replace(", 1fr)", "")}
+							type="text"
+							className="grid-cols-1"
+							handleCustomChange={(value) =>
+								handleCustomChange(
+									"gridTemplateColumns",
+									`repeat(${value}, 1fr)`,
+								)}
+						/>
+						<ValueInput
+							label="Number of rows"
+							id="gridTemplateRows"
+							value={editor.selectedElement?.styles.gridTemplateRows
+								?.toString()
+								.replace("repeat(", "")
+								.replace(", 1fr)", "")}
+							type="text"
+							className="grid-cols-1"
+							handleCustomChange={(value) =>
+								handleCustomChange(
+									"gridTemplateRows",
+									`repeat(${value}, 1fr)`,
+								)}
+						/>
+					</div>
 				{/if}
 
 				{#if editor.selectedElement?.styles.display === "flex" || editor.selectedElement?.styles.display === "grid"}

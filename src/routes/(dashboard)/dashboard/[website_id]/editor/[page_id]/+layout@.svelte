@@ -34,7 +34,7 @@
 	const editor = getEditorState();
 
 	if (data.pageLayout !== null && data.pageLayout.elements.length > 0) {
-		editor.elements = data.pageLayout.elements;
+		editor.init(data.pageLayout.elements);
 	}
 
 	async function savePageName() {

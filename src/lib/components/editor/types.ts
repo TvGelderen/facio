@@ -9,18 +9,10 @@ export type EditorElement = {
     content: EditorElement[] | { href?: string, innerText?: string };
 }
 
-export type EditorState = {
-    elements: EditorElement[];
-    selectedElement: EditorElement | null;
-    device: Device;
-    preview: boolean;
+export type EditorEvent = {
+    redo: EditorAction;
+    undo: EditorAction;
 }
-
-// TODO: Optimize for memory use, think about maybe using events, rather than storing entire editor states
-// type EditorEvent = {
-//      action: EditorAction;
-//      undo: EditorAction;
-// }
 
 export enum ElementType {
     Body = '__body',
@@ -38,6 +30,7 @@ export enum Device {
 
 export enum EditorActionType {
     AddElement = 'ADD_ELEMENT',
+    InsertElement = 'INSERT_ELEMENT',
     UpdateElement = 'UPDATE_ELEMENT',
     DeleteElement = 'DELETE_ELEMENT',
     UpdateSelectedElement = 'UPDATE_SELECTED_ELEMENT',
@@ -50,6 +43,7 @@ export enum EditorActionType {
 
 export type EditorAction =
     | AddElementAction
+    | InsertElementAction
     | UpdateElementAction
     | DeleteElementAction
     | UpdateSelectedElementAction
@@ -62,6 +56,15 @@ export type AddElementAction = {
     type: EditorActionType.AddElement;
     parentId: string;
     element: EditorElement;
+}
+
+export type InsertElementAction = {
+    type: EditorActionType.InsertElement;
+    element: EditorElement;
+    parentId: string;
+    index?: number;
+    previousParentId: string;
+    previousIndex: number | undefined;
 }
 
 export type UpdateElementAction = {

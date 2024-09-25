@@ -1,6 +1,6 @@
 import { getContext, setContext, tick } from "svelte";
-import { addElement, deleteElement, insertElementBefore, insertElementInto, updateElement } from "./editor";
-import { Device, EditorActionType, ElementType, type EditorAction, type EditorElement, type EditorState } from "./types";
+import { addElement, deleteElement, getElementById, insertElement, updateElement } from "./editor";
+import { Device, EditorActionType, ElementType, type EditorAction, type EditorElement, type EditorEvent } from "./types";
 
 export function createEditor() {
     let elements = $state<EditorElement[]>([
@@ -20,67 +20,131 @@ export function createEditor() {
     let device = $state<Device>(Device.Desktop);
     let preview = $state<boolean>(false);
     let live = $state<boolean>(false);
-    let history = $state<EditorState[]>([]);
-    let historyIndex = $state<number>(0);
 
     // Private
-    let draggedElement = $state<EditorElement | null>(null);
-    let draggedElementRef = $state<HTMLElement | null>(null);
-    let dropTarget = $state<EditorElement | null>(null);
-    let dropTargetRef = $state<HTMLElement | null>(null);
+    let undoStack: EditorEvent[] = [];
+    let undoIndex = -1;
+    let draggedElement: EditorElement | null = null;
+    let draggedElementRef: HTMLElement | null = null;
+    let dropTarget: EditorElement | null = null;
+    let dropTargetRef: HTMLElement | null = null;
 
-    function handleAction(action: EditorAction) {
+    function init(value: EditorElement[]) {
+        elements = value;
+        undoStack = [];
+        undoIndex = -1;
+    }
+
+    function handleAction(action: EditorAction, undoable: boolean = true) {
         console.log(action);
 
         switch (action.type) {
             case EditorActionType.AddElement:
                 elements = addElement(elements, action.element, action.parentId);
+                if (undoable) {
+                    undoStack = undoStack.slice(0, undoIndex + 1);
+                    undoStack.push({
+                        redo: action,
+                        undo: {
+                            type: EditorActionType.DeleteElement,
+                            parentId: action.parentId,
+                            element: action.element
+                        }
+                    });
+                    undoIndex++;
+                }
+                break;
+            case EditorActionType.InsertElement:
+                elements = insertElement(deleteElement(elements, action.element), action.element, action.parentId, action.index);
+                console.log(elements);
+                if (undoable) {
+                    undoStack = undoStack.slice(0, undoIndex + 1);
+                    undoStack.push({
+                        redo: action,
+                        undo: {
+                            type: EditorActionType.InsertElement,
+                            element: action.element,
+                            parentId: action.previousParentId,
+                            index: action.previousIndex,
+                            previousParentId: "",
+                            previousIndex: -1,
+                        }
+                    });
+                    undoIndex++;
+                }
                 break;
             case EditorActionType.UpdateElement:
+                const previousElement = getElementById(elements, action.element.id);
                 elements = updateElement(elements, action.element);
+                if (undoable && previousElement) {
+                    undoStack = undoStack.slice(0, undoIndex + 1);
+                    undoStack.push({
+                        redo: action,
+                        undo: {
+                            type: EditorActionType.UpdateElement,
+                            element: previousElement
+                        }
+                    });
+                    undoIndex++;
+                }
                 break;
             case EditorActionType.DeleteElement:
                 elements = deleteElement(elements, action.element);
                 if (selectedElement?.id === action.element.id) {
                     selectedElement = null;
                 }
+                if (undoable) {
+                    undoStack = undoStack.slice(0, undoIndex + 1);
+                    undoStack.push({
+                        redo: action,
+                        undo: {
+                            type: EditorActionType.AddElement,
+                            parentId: action.parentId,
+                            element: action.element
+                        }
+                    });
+                    undoIndex++;
+                }
                 break;
             case EditorActionType.UpdateSelectedElement:
-                if (selectedElement === action.element) {
-                    return;
+                if (selectedElement?.id !== action.element?.id) {
+                    const previousSelected = selectedElement
+                    selectedElement = action.element;
+                    if (undoable) {
+                        undoStack = undoStack.slice(0, undoIndex + 1);
+                        undoStack.push({
+                            redo: action,
+                            undo: {
+                                type: EditorActionType.UpdateSelectedElement,
+                                element: previousSelected
+                            }
+                        });
+                        undoIndex++;
+                    }
                 }
-                selectedElement = action.element;
                 break;
             case EditorActionType.ChangeDevice:
                 device = action.device;
                 break;
             case EditorActionType.Undo:
-                if (historyIndex > 0) {
-                    historyIndex--;
+                if (undoIndex >= 0) {
+                    console.log(undoStack);
+                    console.log(undoIndex);
 
-                    const state = history[historyIndex];
-
-                    elements = state.elements;
-                    selectedElement = state.selectedElement;
-                    device = state.device;
+                    handleAction(undoStack[undoIndex].undo, false);
+                    undoIndex--;
                 }
                 break;
             case EditorActionType.Redo:
-                if (history.length > historyIndex) {
-                    historyIndex++;
-
-                    const state = history[historyIndex];
-
-                    elements = state.elements;
-                    selectedElement = state.selectedElement;
-                    device = state.device;
+                if (undoIndex < undoStack.length - 1) {
+                    undoIndex++;
+                    handleAction(undoStack[undoIndex].redo, false);
                 }
                 break;
         }
 
-        // INFO: This might cause an issue
-        history = [...history.slice(0, historyIndex + 1), getState()];
-        historyIndex++;
+        console.log(undoStack);
+        console.log(undoIndex);
     }
 
     function handleDragStart(event: DragEvent, element: EditorElement, reference: HTMLElement) {
@@ -90,7 +154,6 @@ export function createEditor() {
         dragging = true;
         draggedElement = element;
         draggedElementRef = reference;
-        draggedElementRef.dataset.state = "dragged";
     }
 
     function handleDragOver(event: DragEvent, element: EditorElement, reference: HTMLElement) {
@@ -166,15 +229,26 @@ export function createEditor() {
             return;
         }
 
-        draggedElement.parentId = dropTarget.id;
+        const idx = getElementIdx(draggedElement);
 
         if (draggedElementRef.nextElementSibling !== null && Array.isArray(dropTarget.content)) {
-            const sibling = dropTarget.content.find(el => el.id === draggedElementRef!.nextElementSibling!.id);
-            if (sibling !== undefined) {
-                elements = insertElementBefore(deleteElement(elements, draggedElement), draggedElement, sibling);
-            }
+            const siblingIdx = dropTarget.content.findIndex(el => el.id === draggedElementRef!.nextElementSibling!.id);
+            handleAction({
+                type: EditorActionType.InsertElement,
+                element: draggedElement,
+                parentId: dropTarget.id,
+                index: siblingIdx,
+                previousParentId: draggedElement.parentId,
+                previousIndex: idx,
+            });
         } else {
-            elements = insertElementInto(deleteElement(elements, draggedElement), draggedElement, dropTarget);
+            handleAction({
+                type: EditorActionType.InsertElement,
+                element: draggedElement,
+                parentId: dropTarget.id,
+                previousParentId: draggedElement.parentId,
+                previousIndex: idx,
+            });
         }
 
         await tick();
@@ -182,7 +256,6 @@ export function createEditor() {
         let remove = false;
         for (const child of dropTargetRef.children) {
             if (child.id === draggedElement.id) {
-                console.log(child)
                 if (remove) {
                     child.remove();
                 } else {
@@ -226,11 +299,22 @@ export function createEditor() {
         return type === ElementType.Body || type === ElementType.Container;
     }
 
+    function getElementIdx(element: EditorElement) {
+        const parent = getElementById(elements, element.parentId);
+        if (!parent || !Array.isArray(parent.content)) {
+            return;
+        }
+
+        return parent.content.indexOf(element);
+    }
+
     const toggleView = () => {
         preview = !preview
         live = !live
     };
+
     const undo = () => handleAction({ type: EditorActionType.Undo });
+
     const redo = () => handleAction({ type: EditorActionType.Redo });
 
     function changeDevice(device: Device) {
@@ -238,15 +322,6 @@ export function createEditor() {
             type: EditorActionType.ChangeDevice,
             device,
         });
-    }
-
-    function getState(): EditorState {
-        return {
-            elements: elements,
-            selectedElement: selectedElement,
-            device: device,
-            preview: preview,
-        };
     }
 
     function saveState(pageId: string) {
@@ -272,10 +347,7 @@ export function createEditor() {
         set preview(value: boolean) { preview = value },
         get live() { return live },
         set live(value: boolean) { live = value },
-        get history() { return history },
-        set history(value: EditorState[]) { history = value },
-        get historyIndex() { return historyIndex },
-        set historyIndex(value: number) { historyIndex = value },
+        init,
         handleAction,
         handleDragStart,
         handleDragOver,
@@ -284,7 +356,6 @@ export function createEditor() {
         undo,
         redo,
         changeDevice,
-        getState,
         saveState,
     }
 }
