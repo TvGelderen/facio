@@ -1,5 +1,5 @@
 import { getContext, setContext, tick } from "svelte";
-import { addElement, deleteElement, getElementById, insertElement, updateElement } from "./editor";
+import { addElement, deleteElement, getElementById, insertElement, insertElementDOM, updateElement } from "./editor";
 import { Device, EditorActionType, ElementType, type EditorAction, type EditorElement, type EditorEvent } from "./types";
 
 export function createEditor() {
@@ -56,7 +56,6 @@ export function createEditor() {
                 break;
             case EditorActionType.InsertElement:
                 elements = insertElement(deleteElement(elements, action.element), action.element, action.parentId, action.index);
-                console.log(elements);
                 if (undoable) {
                     undoStack = undoStack.slice(0, undoIndex + 1);
                     undoStack.push({
@@ -71,6 +70,8 @@ export function createEditor() {
                         }
                     });
                     undoIndex++;
+                } else {
+                    insertElementDOM(action.element.id, action.parentId, action.index);
                 }
                 break;
             case EditorActionType.UpdateElement:
@@ -264,6 +265,8 @@ export function createEditor() {
             }
         }
 
+        draggedElement = null;
+        draggedElementRef = null;
         dropTarget = null;
         dropTargetRef = null;
         dragging = false;
@@ -347,6 +350,7 @@ export function createEditor() {
         set preview(value: boolean) { preview = value },
         get live() { return live },
         set live(value: boolean) { live = value },
+        get undoIndex() { return undoIndex },
         init,
         handleAction,
         handleDragStart,

@@ -22,7 +22,6 @@ export function insertElement(elements: EditorElement[], element: EditorElement,
         if (Array.isArray(item.content)) {
             if (item.id === parentId) {
                 if (index) {
-                    console.log(item.content.toSpliced(index, 0, element));
                     return {
                         ...item,
                         content: item.content.toSpliced(index, 0, element)
@@ -77,4 +76,19 @@ export function getElementById(elements: EditorElement[], id: string): EditorEle
             }
         }
     }
+}
+
+export function insertElementDOM(id: string, parentId: string, index: number | undefined) {
+    const element = document.getElementById(id);
+    const parent = document.getElementById(parentId);
+    if (element === null || parent === null) {
+        return;
+    }
+
+    if (index) {
+        parent.insertBefore(element, parent.querySelectorAll(":scope>*")[index]);
+        return;
+    }
+
+    parent?.appendChild(element);
 }

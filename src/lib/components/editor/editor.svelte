@@ -24,7 +24,9 @@
 					<EyeOff />
 				</Button>
 			{/if}
-			<Recursive element={editor.elements[0]} />
+			{#key editor.undoIndex}
+				<Recursive element={editor.elements[0]} />
+			{/key}
 		</div>
 	</div>
 
