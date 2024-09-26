@@ -55,6 +55,7 @@ export function createEditor() {
                 }
                 break;
             case EditorActionType.InsertElement:
+                const previousParentId = action.element.parentId;
                 elements = insertElement(deleteElement(elements, action.element), action.element, action.parentId, action.index);
                 if (undoable) {
                     undoStack = undoStack.slice(0, undoIndex + 1);
@@ -71,7 +72,9 @@ export function createEditor() {
                     });
                     undoIndex++;
                 } else {
-                    insertElementDOM(action.element.id, action.parentId, action.index);
+                    if (action.parentId === previousParentId) {
+                        insertElementDOM(action.element.id, action.parentId, action.index);
+                    }
                 }
                 break;
             case EditorActionType.UpdateElement:
@@ -252,15 +255,21 @@ export function createEditor() {
             });
         }
 
-        await tick();
+        console.log(draggedElement.parentId)
+        console.log(dropTarget.id)
 
-        let remove = false;
-        for (const child of dropTargetRef.children) {
-            if (child.id === draggedElement.id) {
-                if (remove) {
-                    child.remove();
-                } else {
-                    remove = true;
+
+        if (draggedElement.parentId === dropTarget.id) {
+            await tick();
+
+            let remove = false;
+            for (const child of dropTargetRef.children) {
+                if (child.id === draggedElement.id) {
+                    if (remove) {
+                        child.remove();
+                    } else {
+                        remove = true;
+                    }
                 }
             }
         }

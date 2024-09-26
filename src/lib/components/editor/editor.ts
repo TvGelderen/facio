@@ -85,7 +85,8 @@ export function insertElementDOM(id: string, parentId: string, index: number | u
         return;
     }
 
-    if (index) {
+    if (index !== undefined) {
+        console.log(parent.querySelectorAll(":scope>*")[index])
         parent.insertBefore(element, parent.querySelectorAll(":scope>*")[index]);
         return;
     }
