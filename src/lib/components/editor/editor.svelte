@@ -14,6 +14,7 @@
 		<div
 			id="editor"
 			class={`use-automation-zoom-in overflow-auto transition-all duration-300 ${editor.live && "!m-0 !h-dvh !w-dvw !p-0"} ${editor.device === Device.Mobile && "h-[720px] w-[375px]"} ${editor.device === Device.Tablet && "h-[1100px] w-[850px]"} ${editor.device === Device.Desktop && "h-full w-full p-8"}`}
+			role="none"
 		>
 			{#if editor.preview}
 				<Button

@@ -57,6 +57,7 @@ export function createEditor() {
             case EditorActionType.InsertElement:
                 const previousParentId = action.element.parentId;
                 elements = insertElement(deleteElement(elements, action.element), action.element, action.parentId, action.index);
+                console.log(elements[0].content)
                 if (undoable) {
                     undoStack = undoStack.slice(0, undoIndex + 1);
                     undoStack.push({
@@ -160,9 +161,17 @@ export function createEditor() {
         draggedElementRef = reference;
     }
 
-    function handleDragOver(event: DragEvent, element: EditorElement, reference: HTMLElement) {
+    function handleDragOver(event: DragEvent, element?: EditorElement, reference?: HTMLElement) {
         event.preventDefault();
-        if (draggedElement === null || draggedElementRef === null || draggedElementRef.contains(reference) || !isValidDropTarget(element.type)) {
+        if (element === undefined) {
+            element = elements[0];
+            const body = document.getElementById(ElementType.Body);
+            if (body !== null) {
+                reference = body;
+            }
+        }
+
+        if (draggedElement === null || draggedElementRef === null || reference === undefined || draggedElementRef.contains(reference) || !isValidDropTarget(element.type)) {
             return;
         }
 
@@ -255,21 +264,15 @@ export function createEditor() {
             });
         }
 
-        console.log(draggedElement.parentId)
-        console.log(dropTarget.id)
+        await tick();
 
-
-        if (draggedElement.parentId === dropTarget.id) {
-            await tick();
-
-            let remove = false;
-            for (const child of dropTargetRef.children) {
-                if (child.id === draggedElement.id) {
-                    if (remove) {
-                        child.remove();
-                    } else {
-                        remove = true;
-                    }
+        let remove = false;
+        for (const child of dropTargetRef.children) {
+            if (child.id === draggedElement.id) {
+                if (remove) {
+                    child.remove();
+                } else {
+                    remove = true;
                 }
             }
         }
@@ -337,6 +340,8 @@ export function createEditor() {
     }
 
     function saveState(pageId: string) {
+        console.log(elements[0].content);
+
         return fetch(`/api/page/${pageId}`, {
             method: "POST",
             body: JSON.stringify({ elements }),

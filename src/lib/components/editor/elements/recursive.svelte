@@ -95,13 +95,13 @@
 
 <div
 	id={element.id}
-	class={`relative z-10 text-[16px] ${
+	class={`relative z-10 text-[16px] outline-1 outline-offset-[-1px] ${
 		!editor.live
 			? editor.selectedElement?.id === element.id
 				? body
-					? "border border-red-500/50"
-					: "border border-primary"
-				: "border border-dashed border-muted-foreground"
+					? "outline outline-red-500/50"
+					: "outline outline-primary"
+				: "outline-muted-foreground hover:outline"
 			: ""
 	} ${body && "h-full"} ${!body && "h-fit"}`}
 	draggable={!body}

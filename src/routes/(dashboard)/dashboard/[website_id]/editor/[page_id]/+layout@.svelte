@@ -152,6 +152,8 @@
 
 <main
 	class={`flex w-full items-center justify-center ${editor.live ? "mt-0 h-dvh" : "mt-[58px] h-[calc(100dvh_-_58px)]"}`}
+	ondragover={editor.handleDragOver}
+	ondrop={editor.handleDrop}
 >
 	{@render children()}
 </main>

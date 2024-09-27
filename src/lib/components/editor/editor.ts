@@ -21,7 +21,7 @@ export function insertElement(elements: EditorElement[], element: EditorElement,
     return elements.map(item => {
         if (Array.isArray(item.content)) {
             if (item.id === parentId) {
-                if (index) {
+                if (index !== undefined) {
                     return {
                         ...item,
                         content: item.content.toSpliced(index, 0, element)

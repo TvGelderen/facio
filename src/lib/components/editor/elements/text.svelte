@@ -6,7 +6,12 @@
 
 	const editor = getEditorState();
 
+	let edit = $state(false);
+	let editable = $derived(edit && !editor.live);
+
 	function onblur(event: Event) {
+		edit = false;
+
 		if (!event.target || !(event.target instanceof HTMLSpanElement)) {
 			return;
 		}
@@ -30,9 +35,10 @@
 </script>
 
 <span
-	contenteditable={!editor.live}
+	contenteditable={editable}
 	{onblur}
 	{onkeypress}
+	ondblclick={() => (edit = true)}
 	role="form"
 	class="w-full focus-visible:outline-none"
 >
