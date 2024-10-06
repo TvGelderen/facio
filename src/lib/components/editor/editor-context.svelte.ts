@@ -57,7 +57,6 @@ export function createEditor() {
             case EditorActionType.InsertElement:
                 const previousParentId = action.element.parentId;
                 elements = insertElement(deleteElement(elements, action.element), action.element, action.parentId, action.index);
-                console.log(elements[0].content)
                 if (undoable) {
                     undoStack = undoStack.slice(0, undoIndex + 1);
                     undoStack.push({
@@ -133,9 +132,6 @@ export function createEditor() {
                 break;
             case EditorActionType.Undo:
                 if (undoIndex >= 0) {
-                    console.log(undoStack);
-                    console.log(undoIndex);
-
                     handleAction(undoStack[undoIndex].undo, false);
                     undoIndex--;
                 }
@@ -171,7 +167,11 @@ export function createEditor() {
             }
         }
 
-        if (draggedElement === null || draggedElementRef === null || reference === undefined || draggedElementRef.contains(reference) || !isValidDropTarget(element.type)) {
+        if (draggedElement === null ||
+            draggedElementRef === null ||
+            reference === undefined ||
+            draggedElementRef.contains(reference) ||
+            !isValidDropTarget(element.type)) {
             return;
         }
 
