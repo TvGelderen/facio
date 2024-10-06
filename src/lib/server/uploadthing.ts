@@ -31,7 +31,7 @@ export const fileRouter = {
         })
 } satisfies FileRouter;
 
-export type PagegenFileRouter = typeof fileRouter;
+export type FacioFileRouter = typeof fileRouter;
 
 export const utapi = new UTApi({
     token: UPLOADTHING_SECRET

@@ -18,7 +18,7 @@
 		<h1
 			class="text-center text-7xl font-bold leading-snug md:text-9xl xl:text-[240px]"
 		>
-			Pagegen
+			Facio.
 		</h1>
 		<div class="relative flex w-full items-center justify-center">
 			<div
@@ -37,7 +37,7 @@
 >
 	<h2 class="text-center text-2xl md:text-4xl">Choose what you need</h2>
 	<p class="text-center text-muted-foreground">
-		Pagegen's pricing plans a made to fit your needs.
+		Facio's pricing plans a made to fit your needs.
 		<br />
 		Not sure yet? Get started for free in just a few clicks.
 	</p>

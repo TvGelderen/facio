@@ -8,7 +8,7 @@
 </script>
 
 <svelte:head>
-	<title>Pagegen</title>
+	<title>Facio</title>
 </svelte:head>
 
 <ModeWatcher />

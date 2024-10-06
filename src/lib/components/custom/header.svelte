@@ -11,7 +11,7 @@
 
 <header class="relative flex w-full items-center justify-between p-4">
 	<div>
-		<span class="text-2xl font-bold">Pagegen.</span>
+		<span class="text-2xl font-bold">Facio.</span>
 	</div>
 
 	<nav

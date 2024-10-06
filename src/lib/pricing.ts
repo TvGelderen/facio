@@ -2,7 +2,7 @@ export const pricingPlans = [
     {
         id: 'starter',
         title: 'Starter',
-        description: 'Perfect for trying out Pagegen',
+        description: 'Perfect for trying out Facio',
         price: 'Free',
         interval: '',
         features: ['1 Website', '1 Team member'],

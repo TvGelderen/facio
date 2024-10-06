@@ -31,7 +31,7 @@
 </script>
 
 <svelte:head>
-	<title>{website.name} - Pagegen</title>
+	<title>{website.name} - Facio</title>
 </svelte:head>
 
 <div class="relative flex w-full">

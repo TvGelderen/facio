@@ -9,7 +9,7 @@
 </script>
 
 <svelte:head>
-	<title>Dashboard - Pagegen</title>
+	<title>Dashboard - Facio</title>
 </svelte:head>
 
 <header class="flex justify-end p-4">

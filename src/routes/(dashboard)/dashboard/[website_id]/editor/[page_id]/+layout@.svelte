@@ -80,7 +80,7 @@
 </script>
 
 <svelte:head>
-	<title>{data.website.name} - Pagegen</title>
+	<title>{data.website.name} - Facio</title>
 </svelte:head>
 
 <div ondragover={editor.handleDragOver} ondrop={editor.handleDrop} role="none">
